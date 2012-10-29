@@ -4,7 +4,7 @@ PREFIX	= /usr/local
 DESTDIR	=
 LIBDIR	= $(PREFIX)/lib
 CC	?= cc
-CPPFLAGSF?=
+CPPFLAGSF= -I ../include/Database
 CPPFLAGS?=
 CFLAGSF	= -W -fPIC
 CFLAGS	= -Wall -g -O2 -pedantic
@@ -35,7 +35,7 @@ libDatabase.so.0.0 libDatabase.so.0 libDatabase.so: $(libDatabase_OBJS)
 	$(LN) -s -- libDatabase.so.0.0 libDatabase.so.0
 	$(LN) -s -- libDatabase.so.0.0 libDatabase.so
 
-database.o: database.c engines/database.h
+database.o: database.c ../include/Database/database.h
 	$(CC) $(libDatabase_CFLAGS) -c database.c
 
 clean:

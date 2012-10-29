@@ -3,7 +3,7 @@ PREFIX	= /usr/local
 DESTDIR	=
 LIBDIR	= $(PREFIX)/lib
 CC	?= cc
-CPPFLAGSF?=
+CPPFLAGSF= -I ../../include/Database
 CPPFLAGS?=
 CFLAGSF	= -W -fPIC
 CFLAGS	= -Wall -g -O2 -pedantic
@@ -53,19 +53,19 @@ template_LDFLAGS = $(LDFLAGSF) $(LDFLAGS)
 template.so: $(template_OBJS)
 	$(CCSHARED) -o template.so $(template_OBJS) $(template_LDFLAGS)
 
-pdo.o: pdo.c database.h ../../config.h
+pdo.o: pdo.c ../../include/Database/database.h ../../config.h
 	$(CC) $(pdo_CFLAGS) -c pdo.c
 
-pgsql.o: pgsql.c database.h
+pgsql.o: pgsql.c ../../include/Database/database.h
 	$(CC) $(pgsql_CFLAGS) -c pgsql.c
 
-sqlite2.o: sqlite2.c database.h
+sqlite2.o: sqlite2.c ../../include/Database/database.h
 	$(CC) $(sqlite2_CFLAGS) -c sqlite2.c
 
-sqlite3.o: sqlite3.c database.h
+sqlite3.o: sqlite3.c ../../include/Database/database.h
 	$(CC) $(sqlite3_CFLAGS) -c sqlite3.c
 
-template.o: template.c database.h
+template.o: template.c ../../include/Database/database.h
 	$(CC) $(template_CFLAGS) -c template.c
 
 clean:
