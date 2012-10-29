@@ -65,16 +65,16 @@ distclean: clean
 	$(RM) -- $(TARGETS)
 
 install: $(TARGETS)
-	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/database
-	$(INSTALL) -m 0644 -- pgsql.so $(DESTDIR)$(LIBDIR)/Database/database/pgsql.so
-	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/database
-	$(INSTALL) -m 0644 -- sqlite2.so $(DESTDIR)$(LIBDIR)/Database/database/sqlite2.so
-	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/database
-	$(INSTALL) -m 0644 -- sqlite3.so $(DESTDIR)$(LIBDIR)/Database/database/sqlite3.so
+	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
+	$(INSTALL) -m 0644 -- pgsql.so $(DESTDIR)$(LIBDIR)/Database/engine/pgsql.so
+	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
+	$(INSTALL) -m 0644 -- sqlite2.so $(DESTDIR)$(LIBDIR)/Database/engine/sqlite2.so
+	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
+	$(INSTALL) -m 0644 -- sqlite3.so $(DESTDIR)$(LIBDIR)/Database/engine/sqlite3.so
 
 uninstall:
-	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/database/pgsql.so
-	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/database/sqlite2.so
-	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/database/sqlite3.so
+	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/pgsql.so
+	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/sqlite2.so
+	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/sqlite3.so
 
 .PHONY: all clean distclean install uninstall

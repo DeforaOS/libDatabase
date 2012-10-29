@@ -43,7 +43,7 @@ Database * database_new(char const * engine, Config * config,
 	if((database = object_new(sizeof(*database))) == NULL)
 		return NULL;
 	memset(database, 0, sizeof(*database));
-	if((database->plugin = plugin_new(LIBDIR, PACKAGE, "database",
+	if((database->plugin = plugin_new(LIBDIR, "Database", "engine",
 					engine)) == NULL
 			|| (database->dplugin = plugin_lookup(database->plugin,
 					"database")) == NULL
