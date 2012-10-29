@@ -24,6 +24,7 @@ dist:
 		$(PACKAGE)-$(VERSION)/src/database.c \
 		$(PACKAGE)-$(VERSION)/src/Makefile \
 		$(PACKAGE)-$(VERSION)/src/project.conf \
+		$(PACKAGE)-$(VERSION)/src/database/pdo.c \
 		$(PACKAGE)-$(VERSION)/src/database/pgsql.c \
 		$(PACKAGE)-$(VERSION)/src/database/sqlite2.c \
 		$(PACKAGE)-$(VERSION)/src/database/sqlite3.c \

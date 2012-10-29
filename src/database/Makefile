@@ -1,4 +1,4 @@
-TARGETS	= pgsql.so sqlite2.so sqlite3.so template.so
+TARGETS	= pdo.so pgsql.so sqlite2.so sqlite3.so template.so
 PREFIX	= /usr/local
 DESTDIR	=
 LIBDIR	= $(PREFIX)/lib
@@ -17,6 +17,13 @@ INSTALL	?= install
 
 
 all: $(TARGETS)
+
+pdo_OBJS = pdo.o
+pdo_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS)
+pdo_LDFLAGS = $(LDFLAGSF) $(LDFLAGS)
+
+pdo.so: $(pdo_OBJS)
+	$(CCSHARED) -o pdo.so $(pdo_OBJS) $(pdo_LDFLAGS)
 
 pgsql_OBJS = pgsql.o
 pgsql_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) -I `pg_config --includedir` $(CFLAGSF) $(CFLAGS)
@@ -46,6 +53,9 @@ template_LDFLAGS = $(LDFLAGSF) $(LDFLAGS)
 template.so: $(template_OBJS)
 	$(CCSHARED) -o template.so $(template_OBJS) $(template_LDFLAGS)
 
+pdo.o: pdo.c database.h ../../config.h
+	$(CC) $(pdo_CFLAGS) -c pdo.c
+
 pgsql.o: pgsql.c database.h
 	$(CC) $(pgsql_CFLAGS) -c pgsql.c
 
@@ -59,12 +69,14 @@ template.o: template.c database.h
 	$(CC) $(template_CFLAGS) -c template.c
 
 clean:
-	$(RM) -- $(pgsql_OBJS) $(sqlite2_OBJS) $(sqlite3_OBJS) $(template_OBJS)
+	$(RM) -- $(pdo_OBJS) $(pgsql_OBJS) $(sqlite2_OBJS) $(sqlite3_OBJS) $(template_OBJS)
 
 distclean: clean
 	$(RM) -- $(TARGETS)
 
 install: $(TARGETS)
+	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
+	$(INSTALL) -m 0644 -- pdo.so $(DESTDIR)$(LIBDIR)/Database/engine/pdo.so
 	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
 	$(INSTALL) -m 0644 -- pgsql.so $(DESTDIR)$(LIBDIR)/Database/engine/pgsql.so
 	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
@@ -73,6 +85,7 @@ install: $(TARGETS)
 	$(INSTALL) -m 0644 -- sqlite3.so $(DESTDIR)$(LIBDIR)/Database/engine/sqlite3.so
 
 uninstall:
+	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/pdo.so
 	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/pgsql.so
 	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/sqlite2.so
 	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/sqlite3.so
