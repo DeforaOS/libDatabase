@@ -1,6 +1,6 @@
 PACKAGE	= libDatabase
 VERSION	= 0.0.0
-SUBDIRS	= src
+SUBDIRS	= data src
 RM	?= rm -f
 LN	?= ln -f
 TAR	?= tar -czvf
@@ -21,6 +21,10 @@ dist:
 	$(RM) -r -- $(PACKAGE)-$(VERSION)
 	$(LN) -s -- . $(PACKAGE)-$(VERSION)
 	@$(TAR) $(PACKAGE)-$(VERSION).tar.gz -- \
+		$(PACKAGE)-$(VERSION)/data/Makefile \
+		$(PACKAGE)-$(VERSION)/data/libDatabase.pc.in \
+		$(PACKAGE)-$(VERSION)/data/pkgconfig.sh \
+		$(PACKAGE)-$(VERSION)/data/project.conf \
 		$(PACKAGE)-$(VERSION)/src/database.c \
 		$(PACKAGE)-$(VERSION)/src/Makefile \
 		$(PACKAGE)-$(VERSION)/src/project.conf \
