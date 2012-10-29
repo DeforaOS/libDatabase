@@ -1,4 +1,4 @@
-SUBDIRS	= database
+SUBDIRS	= engines
 TARGETS	= libDatabase.a libDatabase.so.0.0 libDatabase.so.0 libDatabase.so
 PREFIX	= /usr/local
 DESTDIR	=
@@ -35,7 +35,7 @@ libDatabase.so.0.0 libDatabase.so.0 libDatabase.so: $(libDatabase_OBJS)
 	$(LN) -s -- libDatabase.so.0.0 libDatabase.so.0
 	$(LN) -s -- libDatabase.so.0.0 libDatabase.so
 
-database.o: database.c database/database.h
+database.o: database.c engines/database.h
 	$(CC) $(libDatabase_CFLAGS) -c database.c
 
 clean:

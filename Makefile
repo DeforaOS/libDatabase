@@ -24,14 +24,14 @@ dist:
 		$(PACKAGE)-$(VERSION)/src/database.c \
 		$(PACKAGE)-$(VERSION)/src/Makefile \
 		$(PACKAGE)-$(VERSION)/src/project.conf \
-		$(PACKAGE)-$(VERSION)/src/database/pdo.c \
-		$(PACKAGE)-$(VERSION)/src/database/pgsql.c \
-		$(PACKAGE)-$(VERSION)/src/database/sqlite2.c \
-		$(PACKAGE)-$(VERSION)/src/database/sqlite3.c \
-		$(PACKAGE)-$(VERSION)/src/database/template.c \
-		$(PACKAGE)-$(VERSION)/src/database/Makefile \
-		$(PACKAGE)-$(VERSION)/src/database/database.h \
-		$(PACKAGE)-$(VERSION)/src/database/project.conf \
+		$(PACKAGE)-$(VERSION)/src/engines/pdo.c \
+		$(PACKAGE)-$(VERSION)/src/engines/pgsql.c \
+		$(PACKAGE)-$(VERSION)/src/engines/sqlite2.c \
+		$(PACKAGE)-$(VERSION)/src/engines/sqlite3.c \
+		$(PACKAGE)-$(VERSION)/src/engines/template.c \
+		$(PACKAGE)-$(VERSION)/src/engines/Makefile \
+		$(PACKAGE)-$(VERSION)/src/engines/database.h \
+		$(PACKAGE)-$(VERSION)/src/engines/project.conf \
 		$(PACKAGE)-$(VERSION)/Makefile \
 		$(PACKAGE)-$(VERSION)/config.h \
 		$(PACKAGE)-$(VERSION)/project.conf
