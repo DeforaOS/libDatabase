@@ -89,6 +89,7 @@ static PDO * _pdo_init(Config * config, char const * section)
 {
 	PDO * pdo;
 	char const * dsn;
+	char const pgsql[] = "pgsql:";
 	char const sqlite3[] = "sqlite:";
 	char const * backend = NULL;
 
@@ -106,6 +107,12 @@ static PDO * _pdo_init(Config * config, char const * section)
 		/* XXX may fail */
 		config_set(config, section, "filename",
 				&dsn[sizeof(sqlite3) - 1]);
+	}
+	else if(strncmp(dsn, pgsql, sizeof(pgsql) - 1) == 0)
+	{
+		backend = "pgsql";
+		section = "database::pgsql";
+		/* FIXME really parse the DSN */
 	}
 	else
 		/* XXX report error */
