@@ -49,8 +49,17 @@ distclean:
 
 install: $(TARGETS)
 	@for i in $(SUBDIRS); do (cd $$i && $(MAKE) install) || exit; done
+	$(MKDIR) $(DESTDIR)$(LIBDIR)
+	$(INSTALL) -m 0644 -- libDatabase.a $(DESTDIR)$(LIBDIR)/libDatabase.a
+	$(INSTALL) -m 0755 -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
+	$(LN) -s -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0
+	$(LN) -s -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so
 
 uninstall:
 	@for i in $(SUBDIRS); do (cd $$i && $(MAKE) uninstall) || exit; done
+	$(RM) -- $(DESTDIR)$(LIBDIR)/libDatabase.a
+	$(RM) -- $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
+	$(RM) -- $(DESTDIR)$(LIBDIR)/libDatabase.so.0
+	$(RM) -- $(DESTDIR)$(LIBDIR)/libDatabase.so
 
 .PHONY: all subdirs clean distclean install uninstall
