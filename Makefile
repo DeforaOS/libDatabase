@@ -1,6 +1,6 @@
 PACKAGE	= libDatabase
 VERSION	= 0.0.0
-SUBDIRS	= data include src
+SUBDIRS	= data doc include src
 RM	?= rm -f
 LN	?= ln -f
 TAR	?= tar -czvf
@@ -25,6 +25,17 @@ dist:
 		$(PACKAGE)-$(VERSION)/data/libDatabase.pc.in \
 		$(PACKAGE)-$(VERSION)/data/pkgconfig.sh \
 		$(PACKAGE)-$(VERSION)/data/project.conf \
+		$(PACKAGE)-$(VERSION)/doc/Makefile \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc.sh \
+		$(PACKAGE)-$(VERSION)/doc/project.conf \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/Makefile \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/libDatabase-docs.xml \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/project.conf \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/tmpl/Makefile \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/tmpl/Database.sgml \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/tmpl/database.sgml \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/tmpl/libDatabase-unused.sgml \
+		$(PACKAGE)-$(VERSION)/doc/gtkdoc/tmpl/project.conf \
 		$(PACKAGE)-$(VERSION)/include/Database.h \
 		$(PACKAGE)-$(VERSION)/include/Makefile \
 		$(PACKAGE)-$(VERSION)/include/project.conf \
