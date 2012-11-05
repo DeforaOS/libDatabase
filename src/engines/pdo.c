@@ -123,7 +123,7 @@ static PDO * _pdo_init(Config * config, char const * section)
 		return NULL;
 	}
 	pdo->database = NULL;
-	if((pdo->plugin = plugin_new(LIBDIR, PACKAGE, "database", backend))
+	if((pdo->plugin = plugin_new(LIBDIR, "Database", "engine", backend))
 			== NULL
 			|| (pdo->dplugin = plugin_lookup(pdo->plugin,
 					"database")) == NULL
