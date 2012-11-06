@@ -235,7 +235,7 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 	size_t cnt;
 	int type;
 	char const * name;
-	long l;
+	int l;
 	char buf[32];
 	time_t t;
 	struct tm tm;
@@ -259,8 +259,8 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 		switch(type)
 		{
 			case DT_INTEGER:
-				l = va_arg(args, long);
-				snprintf(buf, sizeof(buf), "%ld", l);
+				l = va_arg(args, int);
+				snprintf(buf, sizeof(buf), "%d", l);
 				v[cnt] = strdup(buf);
 				break;
 			case DT_TIMESTAMP:
@@ -282,6 +282,10 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 		}
 		if(v[cnt] == NULL)
 			ret = -error_set_code(1, "%s", strerror(errno));
+#ifdef DEBUG
+		fprintf(stderr, "DEBUG: %s() %lu: type %u, \"%s\": \"%s\"\n",
+				__func__, cnt + 1, type, name, v[cnt]);
+#endif
 	}
 	if(ret != 0)
 	{
@@ -293,11 +297,11 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 	pgsql->last = InvalidOid;
 	res = PQexecPrepared(pgsql->handle, statement->query, cnt, v, NULL,
 			NULL, 0);
+	ret = _pgsql_process(pgsql, res, callback, data);
+	PQclear(res);
 	for(i = 0; i < cnt; i++)
 		free(v[i]);
 	free(v);
-	ret = _pgsql_process(pgsql, res, callback, data);
-	PQclear(res);
 	return ret;
 }
 

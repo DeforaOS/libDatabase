@@ -169,7 +169,7 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 	char ** argv;
 	char ** columns;
 	char ** p;
-	long l;
+	int l;
 	time_t t;
 	struct tm tm;
 	char buf[32];
@@ -191,7 +191,7 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 		switch(type)
 		{
 			case DT_INTEGER:
-				l = va_arg(args, long);
+				l = va_arg(args, int);
 #ifdef DEBUG
 				fprintf(stderr, "DEBUG: %s() %s=\"%ld\"\n",
 						__func__, name, l);
@@ -278,7 +278,7 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 				case SQLITE_INTEGER:
 					l = sqlite3_column_int(statement->stmt,
 							i);
-					snprintf(buf, sizeof(buf), "%ld", l);
+					snprintf(buf, sizeof(buf), "%d", l);
 					s = buf;
 					break;
 				case SQLITE_TEXT:
