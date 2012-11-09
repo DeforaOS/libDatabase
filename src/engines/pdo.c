@@ -85,6 +85,9 @@ DatabasePluginDefinition database =
 /* private */
 /* functions */
 /* _pdo_init */
+static char const * _init_pgsql(char const * dsn, Config * config);
+static char const * _init_sqlite3(char const * dsn, Config * config);
+
 static PDO * _pdo_init(Config * config, char const * section)
 {
 	PDO * pdo;
@@ -101,19 +104,9 @@ static PDO * _pdo_init(Config * config, char const * section)
 		return NULL;
 	/* FIXME implement more backends */
 	if(strncmp(dsn, sqlite3, sizeof(sqlite3) - 1) == 0)
-	{
-		backend = "sqlite3";
-		section = "database::sqlite3";
-		/* XXX may fail */
-		config_set(config, section, "filename",
-				&dsn[sizeof(sqlite3) - 1]);
-	}
+		backend = _init_sqlite3(&dsn[sizeof(sqlite3) - 1], config);
 	else if(strncmp(dsn, pgsql, sizeof(pgsql) - 1) == 0)
-	{
-		backend = "pgsql";
-		section = "database::pgsql";
-		/* FIXME really parse the DSN */
-	}
+		backend = _init_pgsql(&dsn[sizeof(pgsql) - 1], config);
 	else
 		/* XXX report error */
 		return NULL;
@@ -136,6 +129,55 @@ static PDO * _pdo_init(Config * config, char const * section)
 	}
 	config_delete(config);
 	return pdo;
+}
+
+static char const * _init_pgsql(char const * dsn, Config * config)
+{
+	char const * section = "database::pgsql";
+	char * p;
+	char const * name;
+	char * r;
+	char const * value;
+
+	if((p = strdup(dsn)) == NULL)
+		return NULL;
+	/* parse the DSN */
+	for(name = p, r = p; *r != '\0'; name = r)
+	{
+		if((r = strchr(name, '=')) == NULL)
+			break; /* XXX detect incomplete parsing */
+		*r = '\0';
+		value = ++r;
+		if((r = strchr(value, ';')) != NULL)
+			*(r++) = '\0';
+		else
+			r = strchr(value, '\0');
+#ifdef DEBUG
+		fprintf(stderr, "DEBUG: %s=%s\n", name, value);
+#endif
+		if(strcmp(name, "user") == 0)
+			name = "username";
+		else if(strcmp(name, "dbname") == 0)
+			name = "database";
+		if(config_set(config, section, name, value) != 0)
+		{
+			r = NULL;
+			break;
+		}
+	}
+	free(p);
+	if(r == NULL)
+		return NULL;
+	return "pgsql";
+}
+
+static char const * _init_sqlite3(char const * dsn, Config * config)
+{
+	char const * section = "database::sqlite3";
+
+	if(config_set(config, section, "filename", dsn) != 0)
+		return NULL;
+	return "sqlite3";
 }
 
 
