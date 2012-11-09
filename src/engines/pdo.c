@@ -85,8 +85,10 @@ DatabasePluginDefinition database =
 /* private */
 /* functions */
 /* _pdo_init */
-static char const * _init_pgsql(char const * dsn, Config * config);
-static char const * _init_sqlite3(char const * dsn, Config * config);
+static char const * _init_pgsql(char const * dsn, Config * config,
+		char const ** section);
+static char const * _init_sqlite3(char const * dsn, Config * config,
+		char const ** section);
 
 static PDO * _pdo_init(Config * config, char const * section)
 {
@@ -104,9 +106,11 @@ static PDO * _pdo_init(Config * config, char const * section)
 		return NULL;
 	/* FIXME implement more backends */
 	if(strncmp(dsn, sqlite3, sizeof(sqlite3) - 1) == 0)
-		backend = _init_sqlite3(&dsn[sizeof(sqlite3) - 1], config);
+		backend = _init_sqlite3(&dsn[sizeof(sqlite3) - 1], config,
+				&section);
 	else if(strncmp(dsn, pgsql, sizeof(pgsql) - 1) == 0)
-		backend = _init_pgsql(&dsn[sizeof(pgsql) - 1], config);
+		backend = _init_pgsql(&dsn[sizeof(pgsql) - 1], config,
+				&section);
 	else
 		/* XXX report error */
 		return NULL;
@@ -131,9 +135,9 @@ static PDO * _pdo_init(Config * config, char const * section)
 	return pdo;
 }
 
-static char const * _init_pgsql(char const * dsn, Config * config)
+static char const * _init_pgsql(char const * dsn, Config * config,
+		char const ** section)
 {
-	char const * section = "database::pgsql";
 	char * p;
 	char const * name;
 	char * r;
@@ -141,6 +145,7 @@ static char const * _init_pgsql(char const * dsn, Config * config)
 
 	if((p = strdup(dsn)) == NULL)
 		return NULL;
+	*section = "database::pgsql";
 	/* parse the DSN */
 	for(name = p, r = p; *r != '\0'; name = r)
 	{
@@ -159,7 +164,7 @@ static char const * _init_pgsql(char const * dsn, Config * config)
 			name = "username";
 		else if(strcmp(name, "dbname") == 0)
 			name = "database";
-		if(config_set(config, section, name, value) != 0)
+		if(config_set(config, *section, name, value) != 0)
 		{
 			r = NULL;
 			break;
@@ -171,11 +176,14 @@ static char const * _init_pgsql(char const * dsn, Config * config)
 	return "pgsql";
 }
 
-static char const * _init_sqlite3(char const * dsn, Config * config)
+static char const * _init_sqlite3(char const * dsn, Config * config,
+		char const ** section)
 {
-	char const * section = "database::sqlite3";
-
-	if(config_set(config, section, "filename", dsn) != 0)
+#ifdef DEBUG
+	fprintf(stderr, "DEBUG: %s() %s=%s\n", __func__, "filename", dsn);
+#endif
+	*section = "database::sqlite3";
+	if(config_set(config, *section, "filename", dsn) != 0)
 		return NULL;
 	return "sqlite3";
 }
