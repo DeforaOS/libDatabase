@@ -200,14 +200,13 @@ static void _prepare_new_adapt(char * query)
 	char * p;
 	int j;
 	size_t len;
-	int c;
 
 	/* FIXME this only works for up to 9 arguments */
 	for(i = 0; (p = strchr(query, ':')) != NULL; i++)
 	{
 		*(p++) = '$';
 		*(p++) = '1' + i;
-		for(j = 0; isalpha((c = p[j])) || p[j] == '_'; j++);
+		for(j = 0; isalpha((unsigned char)p[j]) || p[j] == '_'; j++);
 		len = strlen(p) + 1;
 		memmove(p, &p[j], len - j);
 	}
