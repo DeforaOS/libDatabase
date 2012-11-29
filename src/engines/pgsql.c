@@ -260,27 +260,32 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 			case DT_INTEGER:
 				l = va_arg(args, int);
 				snprintf(buf, sizeof(buf), "%d", l);
-				v[cnt] = strdup(buf);
+				if((v[cnt] = strdup(buf)) == NULL)
+					ret = -error_set_code(1, "%s",
+							strerror(errno));
 				break;
 			case DT_TIMESTAMP:
 				t = va_arg(args, time_t);
-				if(gmtime_r(&t, &tm) == NULL)
-					break;
-				if(strftime(buf, sizeof(buf), "%Y-%m-%d"
-							" %H:%M:%S", &tm) == 0)
-					break;
-				v[cnt] = strdup(buf);
+				if(gmtime_r(&t, &tm) == NULL
+						|| strftime(buf, sizeof(buf),
+							"%Y-%m-%d %H:%M:%S",
+							&tm) == 0
+						|| (v[cnt] = strdup(buf))
+						== NULL)
+					ret = -error_set_code(1, "%s",
+							strerror(errno));
 				break;
 			case DT_VARCHAR:
 				s = va_arg(args, char const *);
-				v[cnt] = (s != NULL) ? strdup(s) : NULL;
+				if(s != NULL && (v[cnt] = strdup(s)) == NULL)
+					ret = -error_set_code(1, "%s",
+							strerror(errno));
 				break;
 			default:
-				errno = ENOSYS;
+				ret = -error_set_code(1, "%s",
+						strerror(ENOSYS));
 				break;
 		}
-		if(v[cnt] == NULL)
-			ret = -error_set_code(1, "%s", strerror(errno));
 #ifdef DEBUG
 		fprintf(stderr, "DEBUG: %s() %lu: type %u, \"%s\": \"%s\"\n",
 				__func__, cnt + 1, type, name, v[cnt]);
