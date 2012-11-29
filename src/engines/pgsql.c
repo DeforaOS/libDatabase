@@ -273,7 +273,7 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 				break;
 			case DT_VARCHAR:
 				s = va_arg(args, char const *);
-				v[cnt] = strdup(s);
+				v[cnt] = (s != NULL) ? strdup(s) : NULL;
 				break;
 			default:
 				errno = ENOSYS;
