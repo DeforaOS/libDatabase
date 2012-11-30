@@ -24,13 +24,13 @@
 #include <errno.h>
 #include <libpq-fe.h>
 #include <System.h>
-#include "database.h"
+#include "Database/engine.h"
 
 
 /* PgSQL */
 /* private */
 /* types */
-typedef struct _DatabasePlugin
+typedef struct _DatabaseEngine
 {
 	PGconn * handle;
 	Oid last;
@@ -68,7 +68,7 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 
 /* public */
 /* variables */
-DatabasePluginDefinition database =
+DatabaseEngineDefinition database =
 {
 	"PostgreSQL",
 	NULL,

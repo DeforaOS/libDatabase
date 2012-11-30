@@ -17,7 +17,7 @@
 
 #include <string.h>
 #include <System.h>
-#include "database.h"
+#include "Database.h"
 #include "../config.h"
 
 
@@ -27,8 +27,8 @@
 struct _Database
 {
 	Plugin * plugin;
-	DatabasePluginDefinition * dplugin;
-	DatabasePlugin * database;
+	DatabaseEngineDefinition * dplugin;
+	DatabaseEngine * database;
 };
 
 
@@ -75,24 +75,22 @@ int64_t database_get_last_id(Database * database)
 
 
 /* database_prepare_new */
-DatabaseStatement * database_prepare_new(
-		Database * database, char const * query)
+DatabaseStatement * database_prepare_new(Database * database,
+		char const * query)
 {
 	return database->dplugin->prepare_new(database->database, query);
 }
 
 
 /* database_prepare_delete */
-void database_prepare_delete(Database * database,
-		DatabaseStatement * statement)
+void database_prepare_delete(Database * database, DatabaseStatement * statement)
 {
 	database->dplugin->prepare_delete(database->database, statement);
 }
 
 
 /* database_prepare_query */
-int database_prepare_query(Database * database,
-		DatabaseStatement * statement,
+int database_prepare_query(Database * database, DatabaseStatement * statement,
 		DatabaseCallback callback, void * data, ...)
 {
 	int ret;

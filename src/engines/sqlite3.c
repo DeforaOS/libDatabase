@@ -23,13 +23,13 @@
 #include <errno.h>
 #include <sqlite3.h>
 #include <System.h>
-#include "database.h"
+#include "Database/engine.h"
 
 
 /* SQLite3 */
 /* private */
 /* types */
-typedef struct _DatabasePlugin
+typedef struct _DatabaseEngine
 {
 	sqlite3 * handle;
 } SQLite3;
@@ -62,7 +62,7 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 
 /* public */
 /* variables */
-DatabasePluginDefinition database =
+DatabaseEngineDefinition database =
 {
 	"SQLite3",
 	NULL,

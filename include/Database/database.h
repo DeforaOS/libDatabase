@@ -18,13 +18,12 @@
 #ifndef LIBDATABASE_DATABASE_DATABASE_H
 # define LIBDATABASE_DATABASE_DATABASE_H
 
-# include <stdarg.h>
 # include <stdint.h>
 # include <System.h>
 
 
 /* Database */
-/* private */
+/* public */
 /* types */
 typedef enum _DatabaseType
 {
@@ -40,31 +39,6 @@ typedef struct _DatabaseStatement DatabaseStatement;
 typedef int (*DatabaseCallback)(void * data, int argc, char ** argv,
 		char ** columns);
 
-typedef struct _DatabasePlugin DatabasePlugin;
-
-typedef struct _DatabasePluginDefinition
-{
-	char const * name;
-	char const * description;
-	/* essential */
-	DatabasePlugin * (*init)(Config * config, char const * section);
-	void (*destroy)(DatabasePlugin * plugin);
-	/* accessors */
-	int64_t (*get_last_id)(DatabasePlugin * plugin);
-	/* useful */
-	int (*query)(DatabasePlugin * plugin, char const * query,
-			DatabaseCallback callback, void * data);
-	/* prepared statements */
-	DatabaseStatement * (*prepare_new)(DatabasePlugin * plugin,
-			char const * query);
-	void (*prepare_delete)(DatabasePlugin * plugin,
-			DatabaseStatement * statement);
-	int (*prepare_query)(DatabasePlugin * plugin,
-			DatabaseStatement * statement,
-			DatabaseCallback callback, void * data,
-			va_list args);
-} DatabasePluginDefinition;
-
 
 /* public */
 /* functions */
@@ -76,12 +50,11 @@ void database_delete(Database * database);
 int64_t database_get_last_id(Database * database);
 
 /* useful */
-DatabaseStatement * database_prepare_new(
-		Database * database, char const * query);
+DatabaseStatement * database_prepare_new(Database * database,
+		char const * query);
 void database_prepare_delete(Database * database,
 		DatabaseStatement * statement);
-int database_prepare_query(Database * database,
-		DatabaseStatement * statement,
+int database_prepare_query(Database * database, DatabaseStatement * statement,
 		DatabaseCallback callback, void * data, ...);
 
 int database_query(Database * database, char const * query,

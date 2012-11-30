@@ -19,6 +19,7 @@
 # define LIBDATABASE_DATABASE_H
 
 # include "Database/database.h"
+# include "Database/engine.h"
 
 
 #endif /* !LIBDATABASE_DATABASE_H */

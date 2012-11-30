@@ -22,13 +22,13 @@
 #endif
 #include <string.h>
 #include <System.h>
-#include "database.h"
+#include "Database/engine.h"
 
 
 /* Template */
 /* private */
 /* types */
-typedef struct _DatabasePlugin
+typedef struct _DatabaseEngine
 {
 	void * handle;
 } Template;
@@ -60,7 +60,7 @@ static int _template_prepare_query(Template * template,
 
 /* public */
 /* variables */
-DatabasePluginDefinition database =
+DatabaseEngineDefinition database =
 {
 	"Template",
 	NULL,

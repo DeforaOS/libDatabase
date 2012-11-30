@@ -22,7 +22,7 @@
 #endif
 #include <string.h>
 #include <System.h>
-#include "database.h"
+#include "Database/engine.h"
 #include "../../config.h"
 
 /* constants */
@@ -37,11 +37,11 @@
 /* PDO */
 /* private */
 /* types */
-typedef struct _DatabasePlugin
+typedef struct _DatabaseEngine
 {
 	Plugin * plugin;
-	DatabasePluginDefinition * dplugin;
-	DatabasePlugin * database;
+	DatabaseEngineDefinition * dplugin;
+	DatabaseEngine * database;
 } PDO;
 
 typedef struct _DatabaseStatement
@@ -69,7 +69,7 @@ static int _pdo_prepare_query(PDO * pdo, PDOStatement * statement,
 
 /* public */
 /* variables */
-DatabasePluginDefinition database =
+DatabaseEngineDefinition database =
 {
 	"PDO",
 	NULL,
