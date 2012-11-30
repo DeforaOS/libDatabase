@@ -117,8 +117,8 @@ static void _sqlite3_destroy(SQLite3 * sqlite3)
 /* _sqlite3_get_last_id */
 static int _sqlite3_get_last_id(SQLite3 * sqlite3)
 {
-	/* FIXME really implement */
-	return -1;
+	/* XXX returns an int64_t */
+	return sqlite3_last_insert_rowid(sqlite3->handle);
 }
 
 
