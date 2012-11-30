@@ -55,7 +55,7 @@ static int _pgsql_process(PgSQL * pgsql, PGresult * res,
 static PgSQL * _pgsql_init(Config * config, char const * section);
 static void _pgsql_destroy(PgSQL * pgsql);
 
-static int _pgsql_get_last_id(PgSQL * pgsql);
+static int64_t _pgsql_get_last_id(PgSQL * pgsql);
 
 static int _pgsql_query(PgSQL * pgsql, char const * query,
 		DatabaseCallback callback, void * data);
@@ -148,7 +148,7 @@ static void _pgsql_destroy(PgSQL * pgsql)
 
 /* accessors */
 /* pgsql_get_last_id */
-static int _pgsql_get_last_id(PgSQL * pgsql)
+static int64_t _pgsql_get_last_id(PgSQL * pgsql)
 {
 	/* FIXME use currval() of the relevant instead */
 	if(pgsql->last == InvalidOid)

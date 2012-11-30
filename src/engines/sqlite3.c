@@ -46,7 +46,7 @@ typedef struct _DatabaseStatement
 static SQLite3 * _sqlite3_init(Config * config, char const * section);
 static void _sqlite3_destroy(SQLite3 * sqlite3);
 
-static int _sqlite3_get_last_id(SQLite3 * sqlite3);
+static int64_t _sqlite3_get_last_id(SQLite3 * sqlite3);
 
 static int _sqlite3_query(SQLite3 * sqlite3, char const * query,
 		DatabaseCallback callback, void * data);
@@ -115,7 +115,7 @@ static void _sqlite3_destroy(SQLite3 * sqlite3)
 
 /* accessors */
 /* _sqlite3_get_last_id */
-static int _sqlite3_get_last_id(SQLite3 * sqlite3)
+static int64_t _sqlite3_get_last_id(SQLite3 * sqlite3)
 {
 	/* XXX returns an int64_t */
 	return sqlite3_last_insert_rowid(sqlite3->handle);

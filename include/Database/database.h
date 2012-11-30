@@ -19,6 +19,7 @@
 # define LIBDATABASE_DATABASE_DATABASE_H
 
 # include <stdarg.h>
+# include <stdint.h>
 # include <System.h>
 
 
@@ -49,7 +50,7 @@ typedef struct _DatabasePluginDefinition
 	DatabasePlugin * (*init)(Config * config, char const * section);
 	void (*destroy)(DatabasePlugin * plugin);
 	/* accessors */
-	int (*get_last_id)(DatabasePlugin * plugin);
+	int64_t (*get_last_id)(DatabasePlugin * plugin);
 	/* useful */
 	int (*query)(DatabasePlugin * plugin, char const * query,
 			DatabaseCallback callback, void * data);
@@ -72,7 +73,7 @@ Database * database_new(char const * engine, Config * config,
 void database_delete(Database * database);
 
 /* accessors */
-int database_get_last_id(Database * database);
+int64_t database_get_last_id(Database * database);
 
 /* useful */
 DatabaseStatement * database_prepare_new(

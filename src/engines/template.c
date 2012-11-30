@@ -45,7 +45,7 @@ typedef struct _DatabaseStatement
 static Template * _template_init(Config * config, char const * section);
 static void _template_destroy(Template * pgsql);
 
-static int _template_get_last_id(Template * pgsql);
+static int64_t _template_get_last_id(Template * pgsql);
 
 static int _template_query(Template * pgsql, char const * query,
 		DatabaseCallback callback, void * data);
@@ -97,7 +97,7 @@ static void _template_destroy(Template * template)
 
 /* accessors */
 /* _template_get_last_id */
-static int _template_get_last_id(Template * template)
+static int64_t _template_get_last_id(Template * template)
 {
 	/* FIXME really implement */
 	return -1;

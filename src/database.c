@@ -68,7 +68,7 @@ void database_delete(Database * database)
 
 /* accessors */
 /* database_get_last_id */
-int database_get_last_id(Database * database)
+int64_t database_get_last_id(Database * database)
 {
 	return database->dplugin->get_last_id(database->database);
 }

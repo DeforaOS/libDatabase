@@ -46,7 +46,7 @@ typedef struct _DatabaseStatement
 static SQLite2 * _sqlite2_init(Config * config, char const * section);
 static void _sqlite2_destroy(SQLite2 * pgsql);
 
-static int _sqlite2_get_last_id(SQLite2 * pgsql);
+static int64_t _sqlite2_get_last_id(SQLite2 * pgsql);
 
 static int _sqlite2_query(SQLite2 * pgsql, char const * query,
 		DatabaseCallback callback, void * data);
@@ -116,7 +116,7 @@ static void _sqlite2_destroy(SQLite2 * sqlite)
 
 /* accessors */
 /* _sqlite2_get_last_id */
-static int _sqlite2_get_last_id(SQLite2 * sqlite)
+static int64_t _sqlite2_get_last_id(SQLite2 * sqlite)
 {
 	/* FIXME really implement */
 	return -1;

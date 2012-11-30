@@ -56,7 +56,7 @@ typedef struct _DatabaseStatement
 static PDO * _pdo_init(Config * config, char const * section);
 static void _pdo_destroy(PDO * pdo);
 
-static int _pdo_get_last_id(PDO * pdo);
+static int64_t _pdo_get_last_id(PDO * pdo);
 
 static int _pdo_query(PDO * pdo, char const * query, DatabaseCallback callback,
 		void * data);
@@ -203,7 +203,7 @@ static void _pdo_destroy(PDO * pdo)
 
 /* accessors */
 /* _pdo_get_last_id */
-static int _pdo_get_last_id(PDO * pdo)
+static int64_t _pdo_get_last_id(PDO * pdo)
 {
 	return pdo->dplugin->get_last_id(pdo->database);
 }
