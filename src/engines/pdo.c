@@ -25,6 +25,7 @@
 #include "database.h"
 #include "../../config.h"
 
+/* constants */
 #ifndef PREFIX
 # define PREFIX		"/usr/local"
 #endif

@@ -257,6 +257,11 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 		v[cnt] = NULL;
 		switch(type)
 		{
+			case DT_NULL:
+				if((v[cnt] = va_arg(args, void *)) != NULL)
+					ret = -error_set_code(1, "%s",
+							strerror(EINVAL));
+				break;
 			case DT_INTEGER:
 				l = va_arg(args, int);
 				snprintf(buf, sizeof(buf), "%d", l);
@@ -277,13 +282,16 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 				break;
 			case DT_VARCHAR:
 				s = va_arg(args, char const *);
-				if(s != NULL && (v[cnt] = strdup(s)) == NULL)
+				if(s == NULL)
+					ret = -error_set_code(1, "%s",
+							strerror(EINVAL));
+				else if((v[cnt] = strdup(s)) == NULL)
 					ret = -error_set_code(1, "%s",
 							strerror(errno));
 				break;
 			default:
-				ret = -error_set_code(1, "%s",
-						strerror(ENOSYS));
+				ret = -error_set_code(1, "%s (%d)",
+						"Unsupported type", type);
 				break;
 		}
 #ifdef DEBUG

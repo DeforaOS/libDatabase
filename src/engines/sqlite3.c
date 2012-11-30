@@ -190,6 +190,13 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 		}
 		switch(type)
 		{
+			case DT_NULL:
+				if((s = va_arg(args, void *)) != NULL)
+					ret = -error_set_code(1, "%s",
+							strerror(EINVAL));
+				else
+					sqlite3_bind_null(statement->stmt, i);
+				break;
 			case DT_INTEGER:
 				l = va_arg(args, int);
 #ifdef DEBUG
@@ -221,7 +228,12 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 							sqlite3->handle));
 				break;
 			case DT_VARCHAR:
-				s = va_arg(args, char const *);
+				if((s = va_arg(args, char const *)) == NULL)
+				{
+					ret = -error_set_code(1, "%s",
+							strerror(EINVAL));
+					break;
+				}
 #ifdef DEBUG
 				fprintf(stderr, "DEBUG: %s() %s=\"%s\" (%d)\n",
 						__func__, name, s, i);

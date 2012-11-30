@@ -27,7 +27,8 @@
 /* types */
 typedef enum _DatabaseType
 {
-	DT_INTEGER = 0,
+	DT_NULL = 0,
+	DT_INTEGER,
 	DT_TIMESTAMP,
 	DT_VARCHAR
 } DatabaseType;
