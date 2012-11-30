@@ -40,6 +40,7 @@ dist:
 		$(PACKAGE)-$(VERSION)/include/Makefile \
 		$(PACKAGE)-$(VERSION)/include/project.conf \
 		$(PACKAGE)-$(VERSION)/include/Database/database.h \
+		$(PACKAGE)-$(VERSION)/include/Database/engine.h \
 		$(PACKAGE)-$(VERSION)/include/Database/Makefile \
 		$(PACKAGE)-$(VERSION)/include/Database/project.conf \
 		$(PACKAGE)-$(VERSION)/src/database.c \
