@@ -61,7 +61,13 @@ Database * database_new(char const * engine, Config * config,
 void database_delete(Database * database)
 {
 	if(database->plugin != NULL)
+	{
+		if(database->dplugin != NULL
+				&& database->dplugin->destroy != NULL
+				&& database->database != NULL)
+			database->dplugin->destroy(database->database);
 		plugin_delete(database->plugin);
+	}
 	object_delete(database);
 }
 
