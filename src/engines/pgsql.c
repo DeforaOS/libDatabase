@@ -188,9 +188,11 @@ static PgSQLStatement * _pgsql_prepare_new(PgSQL * pgsql,
 			|| PQresultStatus(statement->res) != PGRES_COMMAND_OK)
 	{
 		error_set_code(1, "%s", PQerrorMessage(pgsql->handle));
+		free(q);
 		_pgsql_prepare_delete(pgsql, statement);
 		return NULL;
 	}
+	free(q);
 	return statement;
 }
 
