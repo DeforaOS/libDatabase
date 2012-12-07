@@ -273,8 +273,8 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 	}
 	/* obtain the column names */
 	for(i = 0; i < argc; i++)
-		/* XXX cast or duplicate name */
-		columns[i] = sqlite3_column_origin_name(statement->stmt, i);
+		/* XXX may fail */
+		columns[i] = strdup(sqlite3_column_name(statement->stmt, i));
 	for(cnt = 0; (i = sqlite3_step(statement->stmt)) == SQLITE_ROW; cnt++)
 	{
 #ifdef DEBUG
@@ -322,6 +322,8 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 			free(argv[i]);
 	}
 	free(argv);
+	for(i = 0; i < argc; i++)
+		free(columns[i]);
 	free(columns);
 	if(ret == 0 && i != SQLITE_DONE)
 		ret = -error_set_code(1, "%s", sqlite3_errmsg(sqlite3->handle));
