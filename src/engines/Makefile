@@ -19,8 +19,8 @@ INSTALL	= install
 all: $(TARGETS)
 
 pdo_OBJS = pdo.o
-pdo_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS)
-pdo_LDFLAGS = $(LDFLAGSF) $(LDFLAGS)
+pdo_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS) `pkg-config --cflags libSystem`
+pdo_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --cflags libSystem`
 
 pdo.so: $(pdo_OBJS)
 	$(CCSHARED) -o pdo.so $(pdo_OBJS) $(pdo_LDFLAGS)
@@ -54,7 +54,7 @@ template.so: $(template_OBJS)
 	$(CCSHARED) -o template.so $(template_OBJS) $(template_LDFLAGS)
 
 pdo.o: pdo.c ../../include/Database/database.h ../../config.h
-	$(CC) $(pdo_CFLAGS) -c pdo.c
+	$(CC) -D PREFIX=\"$(PREFIX)\" $(pdo_CFLAGS) -c pdo.c
 
 pgsql.o: pgsql.c ../../include/Database/database.h
 	$(CC) $(pgsql_CFLAGS) -c pgsql.c
