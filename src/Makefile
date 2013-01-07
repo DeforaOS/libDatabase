@@ -3,18 +3,18 @@ TARGETS	= libDatabase.a libDatabase.so.0.0 libDatabase.so.0 libDatabase.so
 PREFIX	= /usr/local
 DESTDIR	=
 LIBDIR	= $(PREFIX)/lib
-CC	?= cc
+CC	= cc
 CPPFLAGSF= -I ../include
-CPPFLAGS?=
+CPPFLAGS=
 CFLAGSF	= -W -fPIC
 CFLAGS	= -Wall -g -O2 -pedantic
-AR	?= ar
-RANLIB	?= ranlib
-CCSHARED?= $(CC) -shared
-RM	?= rm -f
-LN	?= ln -f
-MKDIR	?= mkdir -p
-INSTALL	?= install
+AR	= ar
+RANLIB	= ranlib
+CCSHARED= $(CC) -shared
+RM	= rm -f
+LN	= ln -f
+MKDIR	= mkdir -p
+INSTALL	= install
 
 
 all: subdirs $(TARGETS)
