@@ -14,6 +14,7 @@ libDatabase.pc: libDatabase.pc.in ../config.sh
 
 clean:
 	$(RM) -- $(libDatabase.pc_OBJS)
+	./pkgconfig.sh -c -P "$(PREFIX)" -- "libDatabase.pc"
 
 distclean: clean
 	$(RM) -- $(TARGETS)
