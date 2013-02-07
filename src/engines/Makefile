@@ -33,15 +33,15 @@ pgsql.so: $(pgsql_OBJS)
 	$(CCSHARED) -o pgsql.so $(pgsql_OBJS) $(pgsql_LDFLAGS)
 
 sqlite2_OBJS = sqlite2.o
-sqlite2_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS) `pkg-config --cflags sqlite`
-sqlite2_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --libs sqlite`
+sqlite2_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS) `pkg-config --cflags sqlite libSystem`
+sqlite2_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --libs sqlite libSystem`
 
 sqlite2.so: $(sqlite2_OBJS)
 	$(CCSHARED) -o sqlite2.so $(sqlite2_OBJS) $(sqlite2_LDFLAGS)
 
 sqlite3_OBJS = sqlite3.o
-sqlite3_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS) `pkg-config --cflags sqlite3`
-sqlite3_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --libs sqlite3`
+sqlite3_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS) `pkg-config --cflags sqlite3 libSystem`
+sqlite3_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --libs sqlite3 libSystem`
 
 sqlite3.so: $(sqlite3_OBJS)
 	$(CCSHARED) -o sqlite3.so $(sqlite3_OBJS) $(sqlite3_LDFLAGS)
