@@ -45,6 +45,10 @@ dist:
 		$(PACKAGE)-$(VERSION)/include/Database/project.conf \
 		$(PACKAGE)-$(VERSION)/src/database.c \
 		$(PACKAGE)-$(VERSION)/src/Makefile \
+		$(PACKAGE)-$(VERSION)/src/python/project.conf \
+		$(PACKAGE)-$(VERSION)/src/python/Makefile \
+		$(PACKAGE)-$(VERSION)/src/python/libDatabase.c \
+		$(PACKAGE)-$(VERSION)/src/python/libDatabase.py \
 		$(PACKAGE)-$(VERSION)/src/project.conf \
 		$(PACKAGE)-$(VERSION)/src/engines/pdo.c \
 		$(PACKAGE)-$(VERSION)/src/engines/pgsql.c \
