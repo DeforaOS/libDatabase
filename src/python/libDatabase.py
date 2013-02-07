@@ -26,3 +26,6 @@ class Database:
 
 	def getLastId(self):
 		return database.database_get_last_id(self.database)
+
+	def query(self, query):
+		return database.database_query(self.database, query)

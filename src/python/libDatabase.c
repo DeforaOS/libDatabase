@@ -33,6 +33,8 @@ static void _libdatabase_database_delete(PyObject * self);
 static PyObject * _libdatabase_database_get_last_id(PyObject * self,
 		PyObject * args);
 
+static PyObject * _libdatabase_database_query(PyObject * self, PyObject * args);
+
 
 /* variables */
 static PyMethodDef _libdatabase_methods[] =
@@ -41,6 +43,8 @@ static PyMethodDef _libdatabase_methods[] =
 		"Instantiates a Database object." },
 	{ "database_get_last_id", _libdatabase_database_get_last_id,
 		METH_VARARGS, "Obtain the ID of the latest row inserted." },
+	{ "database_query", _libdatabase_database_query, METH_VARARGS,
+		"Perform a query on the Database object." },
 	{ NULL, NULL, 0, NULL }
 };
 
@@ -103,5 +107,23 @@ static PyObject * _libdatabase_database_get_last_id(PyObject * self,
 	if(!PyArg_ParseTuple(args, ""))
 		return NULL;
 	ret = database_get_last_id(database);
+	return Py_BuildValue("i", ret);
+}
+
+
+/* libdatabase_database_query */
+static PyObject * _libdatabase_database_query(PyObject * self, PyObject * args)
+{
+	Database * database;
+	char const * query;
+	int ret;
+
+	if((database = PyCapsule_GetPointer(self, _libdatabase_database_name))
+			== NULL)
+		return NULL;
+	if(!PyArg_ParseTuple(args, "s", &query))
+		return NULL;
+	/* FIXME implement the callbacks one way or another */
+	ret = database_query(database, query, NULL, NULL);
 	return Py_BuildValue("i", ret);
 }
