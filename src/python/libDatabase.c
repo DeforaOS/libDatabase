@@ -30,12 +30,17 @@ static char const _libdatabase_database_name[] = "libDatabase::Database";
 static PyObject * _libdatabase_database_new(PyObject * self, PyObject * args);
 static void _libdatabase_database_delete(PyObject * self);
 
+static PyObject * _libdatabase_database_get_last_id(PyObject * self,
+		PyObject * args);
+
 
 /* variables */
 static PyMethodDef _libdatabase_methods[] =
 {
 	{ "database_new", _libdatabase_database_new, METH_VARARGS,
 		"Instantiates a Database object." },
+	{ "database_get_last_id", _libdatabase_database_get_last_id,
+		METH_VARARGS, "Obtain the ID of the latest row inserted." },
 	{ NULL, NULL, 0, NULL }
 };
 
@@ -82,4 +87,21 @@ static void _libdatabase_database_delete(PyObject * self)
 			== NULL)
 		return;
 	database_delete(database);
+}
+
+
+/* libdatabase_database_get_last_id */
+static PyObject * _libdatabase_database_get_last_id(PyObject * self,
+		PyObject * args)
+{
+	Database * database;
+	int ret;
+
+	if((database = PyCapsule_GetPointer(self, _libdatabase_database_name))
+			== NULL)
+		return NULL;
+	if(!PyArg_ParseTuple(args, ""))
+		return NULL;
+	ret = database_get_last_id(database);
+	return Py_BuildValue("i", ret);
 }

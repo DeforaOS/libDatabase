@@ -23,3 +23,6 @@ import _libDatabase
 class Database:
 	def __init__(self, engine, section):
 		self.database = _libDatabase.database_new(engine, section)
+
+	def getLastId(self):
+		return database.database_get_last_id(self.database)
