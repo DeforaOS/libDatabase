@@ -101,10 +101,10 @@ static PyObject * _libdatabase_database_get_last_id(PyObject * self,
 	Database * database;
 	long long ret;
 
+	if(!PyArg_ParseTuple(args, "O", &self))
+		return NULL;
 	if((database = PyCapsule_GetPointer(self, _libdatabase_database_name))
 			== NULL)
-		return NULL;
-	if(!PyArg_ParseTuple(args, ""))
 		return NULL;
 	ret = database_get_last_id(database);
 	return Py_BuildValue("L", ret);
@@ -118,10 +118,10 @@ static PyObject * _libdatabase_database_query(PyObject * self, PyObject * args)
 	char const * query;
 	int ret;
 
+	if(!PyArg_ParseTuple(args, "Os", &self, &query))
+		return NULL;
 	if((database = PyCapsule_GetPointer(self, _libdatabase_database_name))
 			== NULL)
-		return NULL;
-	if(!PyArg_ParseTuple(args, "s", &query))
 		return NULL;
 	/* FIXME implement the callbacks one way or another */
 	ret = database_query(database, query, NULL, NULL);
