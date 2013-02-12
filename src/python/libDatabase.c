@@ -99,7 +99,7 @@ static PyObject * _libdatabase_database_get_last_id(PyObject * self,
 		PyObject * args)
 {
 	Database * database;
-	int ret;
+	long long ret;
 
 	if((database = PyCapsule_GetPointer(self, _libdatabase_database_name))
 			== NULL)
@@ -107,7 +107,7 @@ static PyObject * _libdatabase_database_get_last_id(PyObject * self,
 	if(!PyArg_ParseTuple(args, ""))
 		return NULL;
 	ret = database_get_last_id(database);
-	return Py_BuildValue("i", ret);
+	return Py_BuildValue("L", ret);
 }
 
 
