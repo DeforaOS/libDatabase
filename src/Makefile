@@ -20,7 +20,7 @@ INSTALL	= install
 all: subdirs $(TARGETS)
 
 subdirs:
-	@for i in $(SUBDIRS); do (cd $$i && $(MAKE)) || exit; done
+	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE)) || exit; done
 
 libDatabase_OBJS = database.o
 libDatabase_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS)
@@ -39,16 +39,16 @@ database.o: database.c ../include/Database/database.h
 	$(CC) $(libDatabase_CFLAGS) -c database.c
 
 clean:
-	@for i in $(SUBDIRS); do (cd $$i && $(MAKE) clean) || exit; done
+	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) clean) || exit; done
 	$(RM) -- $(libDatabase_OBJS)
 
 distclean:
-	@for i in $(SUBDIRS); do (cd $$i && $(MAKE) distclean) || exit; done
+	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) distclean) || exit; done
 	$(RM) -- $(libDatabase_OBJS)
 	$(RM) -- $(TARGETS)
 
 install: $(TARGETS)
-	@for i in $(SUBDIRS); do (cd $$i && $(MAKE) install) || exit; done
+	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) install) || exit; done
 	$(MKDIR) $(DESTDIR)$(LIBDIR)
 	$(INSTALL) -m 0644 -- libDatabase.a $(DESTDIR)$(LIBDIR)/libDatabase.a
 	$(INSTALL) -m 0755 -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
@@ -56,7 +56,7 @@ install: $(TARGETS)
 	$(LN) -s -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so
 
 uninstall:
-	@for i in $(SUBDIRS); do (cd $$i && $(MAKE) uninstall) || exit; done
+	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) uninstall) || exit; done
 	$(RM) -- $(DESTDIR)$(LIBDIR)/libDatabase.a
 	$(RM) -- $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
 	$(RM) -- $(DESTDIR)$(LIBDIR)/libDatabase.so.0
