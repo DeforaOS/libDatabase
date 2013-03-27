@@ -26,8 +26,8 @@ pdo.so: $(pdo_OBJS)
 	$(CCSHARED) -o pdo.so $(pdo_OBJS) $(pdo_LDFLAGS)
 
 pgsql_OBJS = pgsql.o
-pgsql_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) -I `pg_config --includedir` $(CFLAGSF) $(CFLAGS)
-pgsql_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) -L `pg_config --libdir` -Wl,-rpath,`pg_config --libdir` `pg_config --libs` -lpq
+pgsql_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) -I `pg_config --includedir` $(CFLAGSF) $(CFLAGS) `pkg-config --cflags libSystem`
+pgsql_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --cflags libSystem` -L `pg_config --libdir` -Wl,-rpath,`pg_config --libdir` `pg_config --libs` -lpq
 
 pgsql.so: $(pgsql_OBJS)
 	$(CCSHARED) -o pgsql.so $(pgsql_OBJS) $(pgsql_LDFLAGS)
@@ -47,8 +47,8 @@ sqlite3.so: $(sqlite3_OBJS)
 	$(CCSHARED) -o sqlite3.so $(sqlite3_OBJS) $(sqlite3_LDFLAGS)
 
 template_OBJS = template.o
-template_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS)
-template_LDFLAGS = $(LDFLAGSF) $(LDFLAGS)
+template_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS) `pkg-config --cflags libSystem`
+template_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --libs libSystem`
 
 template.so: $(template_OBJS)
 	$(CCSHARED) -o template.so $(template_OBJS) $(template_LDFLAGS)
