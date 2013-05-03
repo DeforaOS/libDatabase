@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) 2012 Pierre Pronchery <khorben@defora.org> */
+/* Copyright (c) 2012-2013 Pierre Pronchery <khorben@defora.org> */
 /* This file is part of DeforaOS Database libDatabase */
 /* This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -322,8 +322,8 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 			free(argv[i]);
 	}
 	free(argv);
-	for(i = 0; i < argc; i++)
-		free(columns[i]);
+	for(l = 0; l < argc; l++)
+		free(columns[l]);
 	free(columns);
 	if(ret == 0 && i != SQLITE_DONE)
 		ret = -error_set_code(1, "%s", sqlite3_errmsg(sqlite3->handle));
