@@ -76,13 +76,13 @@ distclean: clean
 
 install: $(TARGETS)
 	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
-	$(INSTALL) -m 0644 -- pdo.so $(DESTDIR)$(LIBDIR)/Database/engine/pdo.so
+	$(INSTALL) -m 0644 pdo.so $(DESTDIR)$(LIBDIR)/Database/engine/pdo.so
 	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
-	$(INSTALL) -m 0644 -- pgsql.so $(DESTDIR)$(LIBDIR)/Database/engine/pgsql.so
+	$(INSTALL) -m 0644 pgsql.so $(DESTDIR)$(LIBDIR)/Database/engine/pgsql.so
 	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
-	$(INSTALL) -m 0644 -- sqlite2.so $(DESTDIR)$(LIBDIR)/Database/engine/sqlite2.so
+	$(INSTALL) -m 0644 sqlite2.so $(DESTDIR)$(LIBDIR)/Database/engine/sqlite2.so
 	$(MKDIR) $(DESTDIR)$(LIBDIR)/Database/engine
-	$(INSTALL) -m 0644 -- sqlite3.so $(DESTDIR)$(LIBDIR)/Database/engine/sqlite3.so
+	$(INSTALL) -m 0644 sqlite3.so $(DESTDIR)$(LIBDIR)/Database/engine/sqlite3.so
 
 uninstall:
 	$(RM) -- $(DESTDIR)$(LIBDIR)/Database/engine/pdo.so

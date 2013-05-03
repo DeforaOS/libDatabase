@@ -51,8 +51,8 @@ distclean:
 install: $(TARGETS)
 	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) install) || exit; done
 	$(MKDIR) $(DESTDIR)$(LIBDIR)
-	$(INSTALL) -m 0644 -- libDatabase.a $(DESTDIR)$(LIBDIR)/libDatabase.a
-	$(INSTALL) -m 0755 -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
+	$(INSTALL) -m 0644 libDatabase.a $(DESTDIR)$(LIBDIR)/libDatabase.a
+	$(INSTALL) -m 0755 libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
 	$(LN) -s -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0
 	$(LN) -s -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so
 

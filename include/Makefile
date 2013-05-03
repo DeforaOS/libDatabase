@@ -22,7 +22,7 @@ distclean:
 install:
 	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) install) || exit; done
 	$(MKDIR) $(DESTDIR)$(INCLUDEDIR)
-	$(INSTALL) -m 0644 -- Database.h $(DESTDIR)$(INCLUDEDIR)/Database.h
+	$(INSTALL) -m 0644 Database.h $(DESTDIR)$(INCLUDEDIR)/Database.h
 
 uninstall:
 	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) uninstall) || exit; done
