@@ -24,23 +24,33 @@
 /* client */
 /* private */
 /* prototypes */
-static int _client(char const * engine);
+static int _client(char const * engine, char const * cfile,
+		char const * section);
 
 static int _usage(void);
 
 
 /* functions */
 /* client */
-static int _client(char const * engine)
+static int _client(char const * engine, char const * cfile,
+		char const * section)
 {
 	Config * config;
 	Database * db;
 	char buf[BUFSIZ];
 
-	if((config = config_new()) == NULL
-			|| (db = database_new(engine, config, NULL)) == NULL)
+	if(cfile == NULL)
+		section = NULL;
+	if((config = config_new()) == NULL)
 	{
 		error_print("client");
+		return -1;
+	}
+	if((cfile != NULL && config_load(config, cfile) != 0)
+			|| (db = database_new(engine, config, section)) == NULL)
+	{
+		error_print("client");
+		config_delete(config);
 		return 2;
 	}
 	while(fgets(buf, sizeof(buf), stdin) != NULL)
@@ -61,8 +71,11 @@ static int _client(char const * engine)
 /* usage */
 static int _usage(void)
 {
-	fputs("Usage: client -d engine\n"
-"  -d	Database engine to load\n", stderr);
+	fputs("Usage: client -d engine [-C configuration [-S section]]\n"
+"  -d	Database engine to load\n"
+"  -C	Configuration file to load\n"
+"  -S	Section of the configuration file containing the connection data\n",
+stderr);
 	return 1;
 }
 
@@ -74,17 +87,25 @@ int main(int argc, char * argv[])
 {
 	int o;
 	char const * engine = NULL;
+	char const * cfile = NULL;
+	char const * section = NULL;
 
-	while((o = getopt(argc, argv, "d:")) != -1)
+	while((o = getopt(argc, argv, "C:d:S:")) != -1)
 		switch(o)
 		{
+			case 'C':
+				cfile = optarg;
+				break;
 			case 'd':
 				engine = optarg;
+				break;
+			case 'S':
+				section = optarg;
 				break;
 			default:
 				return _usage();
 		}
 	if(engine == NULL || optind != argc)
 		return _usage();
-	return (_client(engine) == 0) ? 0 : 2;
+	return (_client(engine, cfile, section) == 0) ? 0 : 2;
 }
