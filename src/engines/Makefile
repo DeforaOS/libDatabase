@@ -27,7 +27,7 @@ pdo.so: $(pdo_OBJS)
 
 pgsql_OBJS = pgsql.o
 pgsql_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) -I `pg_config --includedir` $(CFLAGSF) $(CFLAGS) `pkg-config --cflags libSystem`
-pgsql_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --cflags libSystem` -L `pg_config --libdir` -Wl,-rpath,`pg_config --libdir` `pg_config --libs` -lpq
+pgsql_LDFLAGS = $(LDFLAGSF) $(LDFLAGS) `pkg-config --cflags libSystem` -L `pg_config --libdir` -Wl,-rpath,`pg_config --libdir` -lpq
 
 pgsql.so: $(pgsql_OBJS)
 	$(CCSHARED) -o pgsql.so $(pgsql_OBJS) $(pgsql_LDFLAGS)
