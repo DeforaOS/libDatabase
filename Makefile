@@ -1,6 +1,6 @@
 PACKAGE	= libDatabase
 VERSION	= 0.0.0
-SUBDIRS	= data doc include src
+SUBDIRS	= data doc include src tools
 RM	= rm -f
 LN	= ln -f
 TAR	= tar -czvf
@@ -57,6 +57,9 @@ dist:
 		$(PACKAGE)-$(VERSION)/src/engines/template.c \
 		$(PACKAGE)-$(VERSION)/src/engines/Makefile \
 		$(PACKAGE)-$(VERSION)/src/engines/project.conf \
+		$(PACKAGE)-$(VERSION)/tools/client.c \
+		$(PACKAGE)-$(VERSION)/tools/Makefile \
+		$(PACKAGE)-$(VERSION)/tools/project.conf \
 		$(PACKAGE)-$(VERSION)/Makefile \
 		$(PACKAGE)-$(VERSION)/config.h \
 		$(PACKAGE)-$(VERSION)/config.sh \
