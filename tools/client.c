@@ -24,21 +24,21 @@
 /* client */
 /* private */
 /* prototypes */
-static int _client(void);
+static int _client(char const * engine);
 
 static int _usage(void);
 
 
 /* functions */
 /* client */
-static int _client(void)
+static int _client(char const * engine)
 {
 	Config * config;
 	Database * db;
 	char buf[BUFSIZ];
 
 	if((config = config_new()) == NULL
-			|| (db = database_new("pgsql", config, NULL)) == NULL)
+			|| (db = database_new(engine, config, NULL)) == NULL)
 	{
 		error_print("client");
 		return 2;
@@ -61,7 +61,8 @@ static int _client(void)
 /* usage */
 static int _usage(void)
 {
-	fputs("Usage: client\n", stderr);
+	fputs("Usage: client -d engine\n"
+"  -d	Database engine to load\n", stderr);
 	return 1;
 }
 
@@ -72,14 +73,18 @@ static int _usage(void)
 int main(int argc, char * argv[])
 {
 	int o;
+	char const * engine = NULL;
 
-	while((o = getopt(argc, argv, "")) != -1)
+	while((o = getopt(argc, argv, "d:")) != -1)
 		switch(o)
 		{
+			case 'd':
+				engine = optarg;
+				break;
 			default:
 				return _usage();
 		}
-	if(optind != argc)
+	if(engine == NULL || optind != argc)
 		return _usage();
-	return (_client() == 0) ? 0 : 2;
+	return (_client(engine) == 0) ? 0 : 2;
 }
