@@ -73,8 +73,8 @@ static int _usage(void)
 {
 	fputs("Usage: client -d engine [-C configuration [-S section]]\n"
 "  -d	Database engine to load\n"
-"  -C	Configuration file to load\n"
-"  -S	Section of the configuration file containing the connection data\n",
+"  -C	Connection file to load\n"
+"  -S	Section of the connection file to use\n",
 stderr);
 	return 1;
 }
