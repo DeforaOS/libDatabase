@@ -23,6 +23,15 @@
 
 /* client */
 /* private */
+/* types */
+typedef struct _Client
+{
+	FILE * fp;
+	int first;
+	int rows;
+} Client;
+
+
 /* prototypes */
 static int _client(char const * engine, char const * cfile,
 		char const * section);
@@ -32,9 +41,12 @@ static int _usage(void);
 
 /* functions */
 /* client */
+static int _client_print(void * data, int argc, char ** argv, char ** columns);
+
 static int _client(char const * engine, char const * cfile,
 		char const * section)
 {
+	Client client;
 	Config * config;
 	Database * db;
 	char buf[BUFSIZ];
@@ -53,17 +65,41 @@ static int _client(char const * engine, char const * cfile,
 		config_delete(config);
 		return 2;
 	}
+	client.fp = stdout;
 	while(fgets(buf, sizeof(buf), stdin) != NULL)
 	{
+		client.first = 1;
+		client.rows = 0;
 		/* XXX it may not have picked a complete line */
-		if(database_query(db, buf, NULL, NULL) != 0)
+		if(database_query(db, buf, _client_print, &client) != 0)
 		{
 			error_print("client");
 			continue;
 		}
-		/* FIXME implement printing the results */
+		fprintf(client.fp, "(%u rows)\n", client.rows);
 	}
 	database_delete(db);
+	return 0;
+}
+
+static int _client_print(void * data, int argc, char ** argv, char ** columns)
+{
+	Client * client = data;
+	int i;
+
+	client->rows++;
+	if(argc == 0)
+		return 0;
+	if(client->first != 0)
+	{
+		client->first = 0;
+		for(i = 0; i < argc; i++)
+			fprintf(client->fp, "|%s", columns[i]);
+		fputs("|\n", client->fp);
+	}
+	for(i = 0; i < argc; i++)
+		fprintf(client->fp, "|%s", argv[i]);
+	fputs("|\n", client->fp);
 	return 0;
 }
 
