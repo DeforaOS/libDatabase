@@ -15,18 +15,28 @@
 
 
 
+#include <unistd.h>
 #include <stdio.h>
 #include <System.h>
 #include "Database.h"
 
 
-int main(void)
+/* client */
+/* private */
+/* prototypes */
+static int _client(void);
+
+static int _usage(void);
+
+
+/* functions */
+/* client */
+static int _client(void)
 {
 	Config * config;
 	Database * db;
 	char buf[BUFSIZ];
 
-	/* FIXME implement a usage screen */
 	if((config = config_new()) == NULL
 			|| (db = database_new("pgsql", config, NULL)) == NULL)
 	{
@@ -45,4 +55,31 @@ int main(void)
 	}
 	database_delete(db);
 	return 0;
+}
+
+
+/* usage */
+static int _usage(void)
+{
+	fputs("Usage: client\n", stderr);
+	return 1;
+}
+
+
+/* public */
+/* functions */
+/* main */
+int main(int argc, char * argv[])
+{
+	int o;
+
+	while((o = getopt(argc, argv, "")) != -1)
+		switch(o)
+		{
+			default:
+				return _usage();
+		}
+	if(optind != argc)
+		return _usage();
+	return (_client() == 0) ? 0 : 2;
 }
