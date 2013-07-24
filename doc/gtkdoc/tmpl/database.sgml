@@ -38,12 +38,6 @@ database
 @Returns: 
 
 
-<!-- ##### STRUCT DatabasePlugin ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT DatabaseStatement ##### -->
 <para>
 
@@ -55,6 +49,7 @@ database
 
 </para>
 
+@DT_NULL: 
 @DT_INTEGER: 
 @DT_TIMESTAMP: 
 @DT_VARCHAR: 
@@ -125,77 +120,6 @@ database
 </para>
 
 @database: 
-@query: 
-@callback: 
-@data: 
-@Returns: 
-
-
-<!-- ##### USER_FUNCTION destroy ##### -->
-<para>
-
-</para>
-
-@plugin: 
-
-
-<!-- ##### USER_FUNCTION get_last_id ##### -->
-<para>
-
-</para>
-
-@plugin: 
-@Returns: 
-
-
-<!-- ##### USER_FUNCTION init ##### -->
-<para>
-
-</para>
-
-@config: 
-@section: 
-@Returns: 
-
-
-<!-- ##### USER_FUNCTION prepare_delete ##### -->
-<para>
-
-</para>
-
-@plugin: 
-@statement: 
-
-
-<!-- ##### USER_FUNCTION prepare_new ##### -->
-<para>
-
-</para>
-
-@plugin: 
-@query: 
-@Returns: 
-
-
-<!-- ##### USER_FUNCTION prepare_query ##### -->
-<para>
-
-</para>
-
-@plugin: 
-@statement: 
-@callback: 
-@data: 
-@args: 
-@Returns: 
-
-
-<!-- ##### USER_FUNCTION query ##### -->
-<para>
-
-</para>
-
-@plugin: 
 @query: 
 @callback: 
 @data: 
