@@ -315,13 +315,16 @@ static int _sqlite3_prepare_query(SQLite3 * sqlite3,
 					__func__, i, argv[i]);
 #endif
 		}
+		/* call the callback */
 		if(ret == 0 && callback != NULL)
-			/* FIXME really implement the callback */
 			callback(data, argc, argv, columns);
 		for(i = 0; i < argc; i++)
 			free(argv[i]);
 	}
 	free(argv);
+	/* call the callback with no values */
+	if(cnt == 0 && callback != NULL)
+		callback(data, argc, NULL, columns);
 	for(l = 0; l < argc; l++)
 		free(columns[l]);
 	free(columns);

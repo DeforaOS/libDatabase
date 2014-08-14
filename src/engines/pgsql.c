@@ -379,15 +379,21 @@ static int _pgsql_process(PgSQL * pgsql, PGresult * res,
 				cnt, columns[i]);
 #endif
 	}
-	n = PQntuples(res);
-	for(j = 0; j < n; j++)
+	if((n = PQntuples(res)) == 0)
 	{
-		/* obtain the values of the fields */
-		for(i = 0; i < cnt; i++)
-			fields[i] = PQgetvalue(res, j, i);
-		/* call the callback */
-		callback(data, cnt, fields, columns);
+		/* call the callback with no values */
+		if(callback != NULL)
+			callback(data, cnt, NULL, columns);
 	}
+	else if(callback != NULL)
+		for(j = 0; j < n; j++)
+		{
+			/* obtain the values of the fields */
+			for(i = 0; i < cnt; i++)
+				fields[i] = PQgetvalue(res, j, i);
+			/* call the callback */
+			callback(data, cnt, fields, columns);
+		}
 	free(fields);
 	free(columns);
 	return 0;
