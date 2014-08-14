@@ -150,7 +150,7 @@ static void _pgsql_destroy(PgSQL * pgsql)
 /* pgsql_get_last_id */
 static int64_t _pgsql_get_last_id(PgSQL * pgsql)
 {
-	/* FIXME use currval() of the relevant instead */
+	/* FIXME use currval() of the relevant sequence instead */
 	if(pgsql->last == InvalidOid)
 		return -1;
 	return pgsql->last;
