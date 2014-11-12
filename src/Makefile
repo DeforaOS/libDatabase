@@ -1,5 +1,6 @@
 SUBDIRS	= engines
-TARGETS	= libDatabase.a libDatabase.so.0.0 libDatabase.so.0 libDatabase.so
+TARGETS	= $(OBJDIR)libDatabase.a $(OBJDIR)libDatabase.so.0.0 $(OBJDIR)libDatabase.so.0 $(OBJDIR)libDatabase.so
+OBJDIR	=
 PREFIX	= /usr/local
 DESTDIR	=
 LIBDIR	= $(PREFIX)/lib
@@ -23,21 +24,21 @@ all: subdirs $(TARGETS)
 subdirs:
 	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE)) || exit; done
 
-libDatabase_OBJS = database.o
+libDatabase_OBJS = $(OBJDIR)database.o
 libDatabase_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS)
 libDatabase_LDFLAGS = $(LDFLAGSF) $(LDFLAGS)
 
-libDatabase.a: $(libDatabase_OBJS)
-	$(AR) -rc libDatabase.a $(libDatabase_OBJS)
-	$(RANLIB) libDatabase.a
+$(OBJDIR)libDatabase.a: $(libDatabase_OBJS)
+	$(AR) -rc $(OBJDIR)libDatabase.a $(libDatabase_OBJS)
+	$(RANLIB) $(OBJDIR)libDatabase.a
 
-libDatabase.so.0.0 libDatabase.so.0 libDatabase.so: $(libDatabase_OBJS)
-	$(CCSHARED) -o libDatabase.so.0.0 -Wl,-soname,libDatabase.so.0 $(libDatabase_OBJS) $(libDatabase_LDFLAGS)
-	$(LN) -s -- libDatabase.so.0.0 libDatabase.so.0
-	$(LN) -s -- libDatabase.so.0.0 libDatabase.so
+$(OBJDIR)libDatabase.so.0.0 $(OBJDIR)libDatabase.so.0 $(OBJDIR)libDatabase.so: $(libDatabase_OBJS)
+	$(CCSHARED) -o $(OBJDIR)libDatabase.so.0.0 -Wl,-soname,libDatabase.so.0 $(libDatabase_OBJS) $(libDatabase_LDFLAGS)
+	$(LN) -s -- libDatabase.so.0.0 $(OBJDIR)libDatabase.so.0
+	$(LN) -s -- libDatabase.so.0.0 $(OBJDIR)libDatabase.so
 
-database.o: database.c ../include/Database/database.h
-	$(CC) $(libDatabase_CFLAGS) -c database.c
+$(OBJDIR)database.o: database.c ../include/Database/database.h
+	$(CC) $(libDatabase_CFLAGS) -o $(OBJDIR)database.o -c database.c
 
 clean:
 	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) clean) || exit; done
@@ -51,8 +52,8 @@ distclean:
 install: $(TARGETS)
 	@for i in $(SUBDIRS); do (cd "$$i" && $(MAKE) install) || exit; done
 	$(MKDIR) $(DESTDIR)$(LIBDIR)
-	$(INSTALL) -m 0644 libDatabase.a $(DESTDIR)$(LIBDIR)/libDatabase.a
-	$(INSTALL) -m 0755 libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
+	$(INSTALL) -m 0644 $(OBJDIR)libDatabase.a $(DESTDIR)$(LIBDIR)/libDatabase.a
+	$(INSTALL) -m 0755 $(OBJDIR)libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0.0
 	$(LN) -s -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so.0
 	$(LN) -s -- libDatabase.so.0.0 $(DESTDIR)$(LIBDIR)/libDatabase.so
 

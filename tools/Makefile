@@ -1,4 +1,5 @@
-TARGETS	= client
+TARGETS	= $(OBJDIR)client
+OBJDIR	=
 PREFIX	= /usr/local
 DESTDIR	=
 BINDIR	= $(PREFIX)/bin
@@ -17,15 +18,15 @@ INSTALL	= install
 
 all: $(TARGETS)
 
-client_OBJS = client.o
+client_OBJS = $(OBJDIR)client.o
 client_CFLAGS = $(CPPFLAGSF) $(CPPFLAGS) $(CFLAGSF) $(CFLAGS)
 client_LDFLAGS = $(LDFLAGSF) $(LDFLAGS)
 
-client: $(client_OBJS)
-	$(CC) -o client $(client_OBJS) $(client_LDFLAGS)
+$(OBJDIR)client: $(client_OBJS)
+	$(CC) -o $(OBJDIR)client $(client_OBJS) $(client_LDFLAGS)
 
-client.o: client.c
-	$(CC) $(client_CFLAGS) -c client.c
+$(OBJDIR)client.o: client.c
+	$(CC) $(client_CFLAGS) -o $(OBJDIR)client.o -c client.c
 
 clean:
 	$(RM) -- $(client_OBJS)

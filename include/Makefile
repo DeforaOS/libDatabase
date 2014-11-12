@@ -1,4 +1,5 @@
 SUBDIRS	= Database
+OBJDIR	=
 PREFIX	= /usr/local
 DESTDIR	=
 RM	= rm -f

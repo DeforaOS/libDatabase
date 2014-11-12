@@ -1,4 +1,5 @@
-TARGETS	= libDatabase.pc
+TARGETS	= $(OBJDIR)libDatabase.pc
+OBJDIR	=
 PREFIX	= /usr/local
 DESTDIR	=
 RM	= rm -f
@@ -9,8 +10,8 @@ INSTALL	= install
 
 all: $(TARGETS)
 
-libDatabase.pc: libDatabase.pc.in ../config.sh
-	./pkgconfig.sh -P "$(PREFIX)" -- "libDatabase.pc"
+$(OBJDIR)libDatabase.pc: libDatabase.pc.in ../config.sh
+	./pkgconfig.sh -P "$(PREFIX)" -- "$(OBJDIR)libDatabase.pc"
 
 clean:
 	$(RM) -- $(libDatabase.pc_OBJS)
@@ -20,7 +21,7 @@ distclean: clean
 	$(RM) -- $(TARGETS)
 
 install: $(TARGETS)
-	./pkgconfig.sh -P "$(DESTDIR)$(PREFIX)" -i -- "libDatabase.pc"
+	./pkgconfig.sh -P "$(DESTDIR)$(PREFIX)" -i -- "$(OBJDIR)libDatabase.pc"
 
 uninstall:
 	./pkgconfig.sh -P "$(DESTDIR)$(PREFIX)" -u -- "libDatabase.pc"
