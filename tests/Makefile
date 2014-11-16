@@ -1,4 +1,4 @@
-TARGETS	= $(OBJDIR)tests.log
+TARGETS	= $(OBJDIR)pylint.log $(OBJDIR)tests.log
 OBJDIR	=
 PREFIX	= /usr/local
 DESTDIR	=
@@ -10,11 +10,15 @@ INSTALL	= install
 
 all: $(TARGETS)
 
+$(OBJDIR)pylint.log: pylint.sh
+	./pylint.sh -P "$(PREFIX)" -- "$(OBJDIR)pylint.log"
+
 $(OBJDIR)tests.log: python.sh tests.sh
 	./tests.sh -P "$(PREFIX)" -- "$(OBJDIR)tests.log"
 
 clean:
-	$(RM) -- $(tests.log_OBJS)
+	$(RM) -- $(pylint.log_OBJS) $(tests.log_OBJS)
+	./pylint.sh -c -P "$(PREFIX)" -- "pylint.log"
 	./tests.sh -c -P "$(PREFIX)" -- "tests.log"
 
 distclean: clean

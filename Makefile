@@ -59,6 +59,7 @@ dist:
 		$(PACKAGE)-$(VERSION)/src/engines/Makefile \
 		$(PACKAGE)-$(VERSION)/src/engines/project.conf \
 		$(PACKAGE)-$(VERSION)/tests/Makefile \
+		$(PACKAGE)-$(VERSION)/tests/pylint.sh \
 		$(PACKAGE)-$(VERSION)/tests/python.sh \
 		$(PACKAGE)-$(VERSION)/tests/tests.sh \
 		$(PACKAGE)-$(VERSION)/tests/project.conf \
