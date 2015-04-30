@@ -85,7 +85,7 @@ DatabaseEngineDefinition database =
 
 /* private */
 /* functions */
-/* _pdo_init */
+/* pdo_init */
 static char const * _init_pgsql(char const * dsn, Config * config,
 		char const ** section);
 static char const * _init_sqlite3(char const * dsn, Config * config,
@@ -190,7 +190,7 @@ static char const * _init_sqlite3(char const * dsn, Config * config,
 }
 
 
-/* _pdo_destroy */
+/* pdo_destroy */
 static void _pdo_destroy(PDO * pdo)
 {
 	if(pdo->database != NULL)
@@ -202,7 +202,7 @@ static void _pdo_destroy(PDO * pdo)
 
 
 /* accessors */
-/* _pdo_get_last_id */
+/* pdo_get_last_id */
 static int64_t _pdo_get_last_id(PDO * pdo)
 {
 	return pdo->dplugin->get_last_id(pdo->database);
@@ -210,7 +210,7 @@ static int64_t _pdo_get_last_id(PDO * pdo)
 
 
 /* useful */
-/* _pdo_prepare_new */
+/* pdo_prepare_new */
 static PDOStatement * _pdo_prepare_new(PDO * pdo, char const * query)
 {
 	PDOStatement * statement;
@@ -227,7 +227,7 @@ static PDOStatement * _pdo_prepare_new(PDO * pdo, char const * query)
 }
 
 
-/* _pdo_prepare_delete */
+/* pdo_prepare_delete */
 static void _pdo_prepare_delete(PDO * pdo, PDOStatement * statement)
 {
 	pdo->dplugin->prepare_delete(pdo->database, statement->statement);
@@ -235,7 +235,7 @@ static void _pdo_prepare_delete(PDO * pdo, PDOStatement * statement)
 }
 
 
-/* _pdo_prepare_query */
+/* pdo_prepare_query */
 static int _pdo_prepare_query(PDO * pdo, PDOStatement * statement,
 		DatabaseCallback callback, void * data, va_list args)
 {
@@ -244,7 +244,7 @@ static int _pdo_prepare_query(PDO * pdo, PDOStatement * statement,
 }
 
 
-/* _pdo_query */
+/* pdo_query */
 static int _pdo_query(PDO * pdo, char const * query, DatabaseCallback callback,
 		void * data)
 {

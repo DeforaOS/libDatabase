@@ -76,7 +76,7 @@ DatabaseEngineDefinition database =
 
 /* private */
 /* functions */
-/* _template_init */
+/* template_init */
 static Template * _template_init(Config * config, char const * section)
 {
 	Template * template;
@@ -88,7 +88,7 @@ static Template * _template_init(Config * config, char const * section)
 }
 
 
-/* _template_destroy */
+/* template_destroy */
 static void _template_destroy(Template * template)
 {
 	object_delete(template);
@@ -96,7 +96,7 @@ static void _template_destroy(Template * template)
 
 
 /* accessors */
-/* _template_get_last_id */
+/* template_get_last_id */
 static int64_t _template_get_last_id(Template * template)
 {
 	/* FIXME really implement */
@@ -105,7 +105,7 @@ static int64_t _template_get_last_id(Template * template)
 
 
 /* useful */
-/* _template_prepare_new */
+/* template_prepare_new */
 static TemplateStatement * _template_prepare_new(Template * template,
 		char const * query)
 {
@@ -118,7 +118,7 @@ static TemplateStatement * _template_prepare_new(Template * template,
 }
 
 
-/* _template_prepare_delete */
+/* template_prepare_delete */
 static void _template_prepare_delete(Template * template, TemplateStatement * statement)
 {
 	string_delete(statement->query);
@@ -126,7 +126,7 @@ static void _template_prepare_delete(Template * template, TemplateStatement * st
 }
 
 
-/* _template_prepare_query */
+/* template_prepare_query */
 static int _template_prepare_query(Template * template,
 		TemplateStatement * statement, DatabaseCallback callback,
 		void * data, va_list args)
@@ -155,7 +155,7 @@ static int _template_prepare_query(Template * template,
 }
 
 
-/* _template_query */
+/* template_query */
 static int _template_query(Template * template, char const * query,
 		DatabaseCallback callback, void * data)
 {
