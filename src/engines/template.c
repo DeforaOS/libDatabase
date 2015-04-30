@@ -49,6 +49,8 @@ static int64_t _template_get_last_id(Template * pgsql);
 
 static int _template_query(Template * pgsql, char const * query,
 		DatabaseCallback callback, void * data);
+static DatabaseResult * _template_query_result(Template * pgsql,
+		char const * query);
 
 static TemplateStatement * _template_prepare_new(Template * pgsql,
 		char const * query);
@@ -56,6 +58,8 @@ static void _template_prepare_delete(Template * pgsql, TemplateStatement * state
 static int _template_prepare_query(Template * template,
 		TemplateStatement * statement, DatabaseCallback callback,
 		void * data, va_list args);
+static DatabaseResult * _template_prepare_query_result(Template * template,
+		TemplateStatement * statement, va_list args);
 
 
 /* public */
@@ -68,9 +72,11 @@ DatabaseEngineDefinition database =
 	_template_destroy,
 	_template_get_last_id,
 	_template_query,
+	_template_query_result,
 	_template_prepare_new,
 	_template_prepare_delete,
-	_template_prepare_query
+	_template_prepare_query,
+	_template_prepare_query_result
 };
 
 
@@ -152,6 +158,34 @@ static int _template_prepare_query(Template * template,
 		}
 	}
 	return -1;
+}
+
+
+/* template_prepare_query_result */
+static DatabaseResult * _template_prepare_query_result(Template * template,
+		TemplateStatement * statement, va_list args)
+{
+	int type = -1;
+	char const * name;
+	char const * s;
+	void * p;
+
+	/* FIXME really implement */
+	while((type = va_arg(args, int)) != -1)
+	{
+		name = va_arg(args, char const *);
+		switch(type)
+		{
+			case DT_VARCHAR:
+				s = va_arg(args, char const *);
+				/* FIXME implement */
+				break;
+			default:
+				p = va_arg(args, void *);
+				break;
+		}
+	}
+	return NULL;
 }
 
 

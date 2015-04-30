@@ -20,6 +20,7 @@
 
 # include <stdint.h>
 # include <System.h>
+# include "result.h"
 
 
 /* Database */
@@ -59,5 +60,6 @@ int database_prepare_query(Database * database, DatabaseStatement * statement,
 
 int database_query(Database * database, char const * query,
 		DatabaseCallback callback, void * data);
+DatabaseResult * database_query_result(Database * database, char const * query);
 
 #endif /* !LIBDATABASE_DATABASE_DATABASE_H */

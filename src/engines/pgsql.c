@@ -76,9 +76,11 @@ DatabaseEngineDefinition database =
 	_pgsql_destroy,
 	_pgsql_get_last_id,
 	_pgsql_query,
+	NULL,
 	_pgsql_prepare_new,
 	_pgsql_prepare_delete,
-	_pgsql_prepare_query
+	_pgsql_prepare_query,
+	NULL
 };
 
 

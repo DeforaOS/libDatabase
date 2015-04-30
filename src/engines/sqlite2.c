@@ -69,9 +69,11 @@ DatabaseEngineDefinition database =
 	_sqlite2_destroy,
 	_sqlite2_get_last_id,
 	_sqlite2_query,
+	NULL,
 	_sqlite2_prepare_new,
 	_sqlite2_prepare_delete,
-	_sqlite2_prepare_query
+	_sqlite2_prepare_query,
+	NULL
 };
 
 

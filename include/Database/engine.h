@@ -22,6 +22,7 @@
 # include <stdint.h>
 # include <System.h>
 # include "database.h"
+# include "result.h"
 
 
 /* DatabaseEngine */
@@ -41,6 +42,8 @@ typedef struct _DatabaseEngineDefinition
 	/* useful */
 	int (*query)(DatabaseEngine * engine, char const * query,
 			DatabaseCallback callback, void * data);
+	DatabaseResult * (*query_result)(DatabaseEngine * engine,
+			char const * query);
 	/* prepared statements */
 	DatabaseStatement * (*prepare_new)(DatabaseEngine * engine,
 			char const * query);
@@ -49,6 +52,9 @@ typedef struct _DatabaseEngineDefinition
 	int (*prepare_query)(DatabaseEngine * engine,
 			DatabaseStatement * statement,
 			DatabaseCallback callback, void * data,
+			va_list args);
+	DatabaseResult * (*prepare_query_result)(DatabaseEngine * engine,
+			DatabaseStatement * statement,
 			va_list args);
 } DatabaseEngineDefinition;
 

@@ -70,9 +70,11 @@ DatabaseEngineDefinition database =
 	_sqlite3_destroy,
 	_sqlite3_get_last_id,
 	_sqlite3_query,
+	NULL,
 	_sqlite3_prepare_new,
 	_sqlite3_prepare_delete,
-	_sqlite3_prepare_query
+	_sqlite3_prepare_query,
+	NULL
 };
 
 

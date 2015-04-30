@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) 2012-2015 Pierre Pronchery <khorben@defora.org> */
+/* Copyright (c) 2015 Pierre Pronchery <khorben@defora.org> */
 /* This file is part of DeforaOS Database libDatabase */
 /* This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,17 @@
 
 
 
-#ifndef LIBDATABASE_DATABASE_H
-# define LIBDATABASE_DATABASE_H
-
-# include "Database/database.h"
-# include "Database/engine.h"
-# include "Database/result.h"
+#ifndef LIBDATABASE_DATABASE_RESULT_H
+# define LIBDATABASE_DATABASE_RESULT_H
 
 
-#endif /* !LIBDATABASE_DATABASE_H */
+/* DatabaseResult */
+/* public */
+/* types */
+typedef struct _DatabaseResult DatabaseResult;
+
+
+/* methods */
+void databaseresult_delete(DatabaseResult * result);
+
+#endif /* !LIBDATABASE_DATABASE_RESULT_H */

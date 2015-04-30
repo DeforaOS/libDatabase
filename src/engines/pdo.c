@@ -60,11 +60,14 @@ static int64_t _pdo_get_last_id(PDO * pdo);
 
 static int _pdo_query(PDO * pdo, char const * query, DatabaseCallback callback,
 		void * data);
+static DatabaseResult * _pdo_query_result(PDO * pdo, char const * query);
 
 static PDOStatement * _pdo_prepare_new(PDO * pdo, char const * query);
 static void _pdo_prepare_delete(PDO * pdo, PDOStatement * statement);
 static int _pdo_prepare_query(PDO * pdo, PDOStatement * statement,
 		DatabaseCallback callback, void * data, va_list args);
+static DatabaseResult * _pdo_prepare_query_result(PDO * pdo,
+		PDOStatement * statement, va_list args);
 
 
 /* public */
@@ -77,9 +80,11 @@ DatabaseEngineDefinition database =
 	_pdo_destroy,
 	_pdo_get_last_id,
 	_pdo_query,
+	_pdo_query_result,
 	_pdo_prepare_new,
 	_pdo_prepare_delete,
-	_pdo_prepare_query
+	_pdo_prepare_query,
+	_pdo_prepare_query_result
 };
 
 
@@ -244,6 +249,17 @@ static int _pdo_prepare_query(PDO * pdo, PDOStatement * statement,
 }
 
 
+/* pdo_prepare_query_result */
+static DatabaseResult * _pdo_prepare_query_result(PDO * pdo,
+		PDOStatement * statement, va_list args)
+{
+	if(pdo->dplugin->prepare_query_result == NULL)
+		return NULL;
+	return pdo->dplugin->prepare_query_result(pdo->database,
+			statement->statement, args);
+}
+
+
 /* pdo_query */
 static int _pdo_query(PDO * pdo, char const * query, DatabaseCallback callback,
 		void * data)
@@ -252,4 +268,16 @@ static int _pdo_query(PDO * pdo, char const * query, DatabaseCallback callback,
 	fprintf(stderr, "DEBUG: %s(\"%s\")\n", __func__, query);
 #endif
 	return pdo->dplugin->query(pdo->database, query, callback, data);
+}
+
+
+/* pdo_query_result */
+static DatabaseResult * _pdo_query_result(PDO * pdo, char const * query)
+{
+#ifdef DEBUG
+	fprintf(stderr, "DEBUG: %s(\"%s\")\n", __func__, query);
+#endif
+	if(pdo->dplugin->query_result == NULL)
+		return NULL;
+	return pdo->dplugin->query_result(pdo->database, query);
 }
