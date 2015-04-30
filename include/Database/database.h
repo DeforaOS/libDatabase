@@ -51,6 +51,10 @@ void database_delete(Database * database);
 int64_t database_get_last_id(Database * database);
 
 /* useful */
+DatabaseResult * database_list_databases(Database * database);
+DatabaseResult * database_list_tables(Database * database);
+DatabaseResult * database_list_users(Database * database);
+
 DatabaseStatement * database_prepare_new(Database * database,
 		char const * query);
 void database_prepare_delete(Database * database,
