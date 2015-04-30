@@ -235,7 +235,9 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 	int ret = 0;
 	size_t cnt;
 	int type;
+#ifdef DEBUG
 	char const * name;
+#endif
 	int l;
 	char buf[32];
 	time_t t;
@@ -249,7 +251,11 @@ static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
 	/* FIXME this assumes the same order as in the prepared statement */
 	for(cnt = 0; ret == 0 && (type = va_arg(args, int)) != -1; cnt++)
 	{
+#ifdef DEBUG
 		name = va_arg(args, char const *);
+#else
+		va_arg(args, char const *);
+#endif
 		if((p = realloc(v, sizeof(*v) * (cnt + 1))) == NULL)
 		{
 			ret = -error_set_code(1, "%s", strerror(errno));
