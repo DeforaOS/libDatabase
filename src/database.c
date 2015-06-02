@@ -20,6 +20,13 @@
 #include "Database.h"
 #include "../config.h"
 
+#ifndef PREFIX
+# define PREFIX		"/usr/local"
+#endif
+#ifndef LIBDIR
+# define LIBDIR		PREFIX "/lib"
+#endif
+
 
 /* Database */
 /* private */
