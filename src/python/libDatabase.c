@@ -16,7 +16,7 @@
 
 
 #include <Python.h>
-#include "Database.h"
+#include "../../include/Database.h"
 
 
 /* libDatabase */
