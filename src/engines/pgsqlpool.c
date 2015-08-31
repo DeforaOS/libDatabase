@@ -17,4 +17,42 @@
 
 
 
+#define database pgsql_database
 #include "pgsql.c"
+#undef database
+
+
+/* protected */
+/* prototypes */
+static PgSQL * _pgsqlpool_init(Config * config, char const * section);
+
+
+/* public */
+/* variables */
+DatabaseEngineDefinition database =
+{
+	"PostgreSQL Pool",
+	NULL,
+	_pgsqlpool_init,
+	_pgsql_destroy,
+	_pgsql_get_last_id,
+	_pgsql_query,
+	_pgsql_prepare_new,
+	_pgsql_prepare_delete,
+	_pgsql_prepare_query
+};
+
+
+/* functions */
+/* plug-in */
+/* pgsqlpool_init */
+static PgSQL * _pgsqlpool_init(Config * config, char const * section)
+{
+	const char pgsqlpool[] = "database::pgsqlpool";
+	const char pgsql[] = "database::pgsql";
+
+	/* XXX default to the regular master if detected */
+	if(string_compare(section, pgsqlpool) == 0)
+		section = pgsql;
+	return _pgsql_init(config, pgsql);
+}
