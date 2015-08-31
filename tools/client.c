@@ -20,6 +20,10 @@
 #include <System.h>
 #include "Database.h"
 
+#ifndef PROGNAME
+# define PROGNAME	"client"
+#endif
+
 
 /* client */
 /* private */
@@ -55,13 +59,13 @@ static int _client(char const * engine, char const * cfile,
 		section = NULL;
 	if((config = config_new()) == NULL)
 	{
-		error_print("client");
+		error_print(PROGNAME);
 		return -1;
 	}
 	if((cfile != NULL && config_load(config, cfile) != 0)
 			|| (db = database_new(engine, config, section)) == NULL)
 	{
-		error_print("client");
+		error_print(PROGNAME);
 		config_delete(config);
 		return 2;
 	}
@@ -73,7 +77,7 @@ static int _client(char const * engine, char const * cfile,
 		/* XXX it may not have picked a complete line */
 		if(database_query(db, buf, _client_print, &client) != 0)
 		{
-			error_print("client");
+			error_print(PROGNAME);
 			continue;
 		}
 		fprintf(client.fp, "(%u rows)\n", client.rows);
@@ -107,7 +111,7 @@ static int _client_print(void * data, int argc, char ** argv, char ** columns)
 /* usage */
 static int _usage(void)
 {
-	fputs("Usage: client -d engine [-C configuration [-S section]]\n"
+	fputs("Usage: " PROGNAME " -d engine [-C configuration [-S section]]\n"
 "  -d	Database engine to load\n"
 "  -C	Connection file to load\n"
 "  -S	Section of the connection file to use\n",
