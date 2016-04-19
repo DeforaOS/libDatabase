@@ -1,4 +1,5 @@
 /pylint.log
+/shlint.log
 /sqlite3
 /sqlite3.db
 /tests.log
