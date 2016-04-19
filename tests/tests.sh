@@ -100,6 +100,7 @@ target="$1"
 $DATE > "$target"
 FAILED=
 echo "Performing tests:" 1>&2
+_test "sqlite3"
 echo "Expected failures:" 1>&2
 _fail "python.sh"
 if [ -n "$FAILED" ]; then
