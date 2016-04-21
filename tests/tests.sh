@@ -21,6 +21,7 @@ PROGNAME="tests.sh"
 [ -n "$OBJDIR" ] || OBJDIR="./"
 #executables
 DATE="date"
+PKGCONFIG="pkg-config"
 
 
 #functions
@@ -42,7 +43,9 @@ _run()
 	echo -n "$test:" 1>&2
 	(echo
 	echo "Testing: $test" "$@"
-	LD_LIBRARY_PATH="$OBJDIR../src" "$OBJDIR$test" "$@") 2>&1
+	testexe="./$test"
+	[ -x "$OBJDIR$test" ] && testexe="$OBJDIR$test"
+	LD_LIBRARY_PATH="$OBJDIR../src" "$testexe" "$@") 2>&1
 	res=$?
 	if [ $res -ne 0 ]; then
 		echo "Test: $test$sep$@: FAIL (error $res)"
@@ -97,13 +100,26 @@ target="$1"
 
 [ "$clean" -ne 0 ]			&& exit 0
 
+tests=
+#XXX needs the engine to be installed
+failures="sqlite3"
+
+if $PKGCONFIG --exists python-2.7; then
+	tests="$tests python.sh"
+else
+	failures="$failures python.sh"
+fi
+
 $DATE > "$target"
 FAILED=
 echo "Performing tests:" 1>&2
+for test in $tests; do
+	_test "$test"
+done
 echo "Expected failures:" 1>&2
-#XXX needs the engine to be installed
-_fail "sqlite3"
-_fail "python.sh"
+for test in $failures; do
+	_fail "$test"
+done
 if [ -n "$FAILED" ]; then
 	echo "Failed tests:$FAILED" 1>&2
 	exit 2
