@@ -100,7 +100,7 @@ target="$1"
 
 [ "$clean" -ne 0 ]			&& exit 0
 
-tests=
+tests="pkgconfig.sh"
 #XXX needs the engine to be installed
 failures="sqlite3"
 
