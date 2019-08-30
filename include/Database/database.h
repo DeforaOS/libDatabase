@@ -52,4 +52,8 @@ int64_t database_get_last_id(Database * database);
 int database_query(Database * database, char const * query,
 		DatabaseCallback callback, void * data);
 
+int database_transaction_begin(Database * database);
+int database_transaction_commit(Database * database);
+int database_transaction_rollback(Database * database);
+
 #endif /* !LIBDATABASE_DATABASE_DATABASE_H */
