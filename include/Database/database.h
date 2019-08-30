@@ -33,6 +33,13 @@ typedef enum _DatabaseType
 	DT_VARCHAR
 } DatabaseType;
 
+typedef enum _DatabaseObject
+{
+	DO_INDEX = 0,
+	DO_TABLE,
+	DO_VIEWS
+} DatabaseObject;
+
 typedef struct _Database Database;
 typedef struct _DatabaseStatement DatabaseStatement;
 
@@ -50,6 +57,11 @@ void database_delete(Database * database);
 int64_t database_get_last_id(Database * database);
 
 /* useful */
+int database_describe(Database * database, DatabaseObject what,
+		char const * name, DatabaseCallback callback, void * data);
+
+char const ** database_list(Database * database, DatabaseObject what);
+
 DatabaseStatement * database_prepare_new(Database * database,
 		char const * query);
 void database_prepare_delete(Database * database,
