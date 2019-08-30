@@ -33,14 +33,18 @@ typedef struct _DatabaseEngineDefinition
 {
 	char const * name;
 	char const * description;
+
 	/* essential */
 	DatabaseEngine * (*init)(Config * config, char const * section);
 	void (*destroy)(DatabaseEngine * engine);
+
 	/* accessors */
 	int64_t (*get_last_id)(DatabaseEngine * engine);
+
 	/* useful */
 	int (*query)(DatabaseEngine * engine, char const * query,
 			DatabaseCallback callback, void * data);
+
 	/* prepared statements */
 	DatabaseStatement * (*prepare_new)(DatabaseEngine * engine,
 			char const * query);
