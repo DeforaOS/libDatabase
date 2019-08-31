@@ -222,6 +222,8 @@ static void _prepare_new_adapt(char * query)
 static void _pgsql_prepare_delete(PgSQL * pgsql,
 		PgSQLStatement * statement)
 {
+	(void) pgsql;
+
 	PQclear(statement->res);
 	free(statement->query);
 	object_delete(statement);
