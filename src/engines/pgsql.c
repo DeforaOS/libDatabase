@@ -36,7 +36,7 @@ typedef struct _DatabaseEngine
 	Oid last;
 } PgSQL;
 
-typedef struct _DatabaseStatement
+typedef struct _DatabaseEngineStatement
 {
 	PGresult * res;
 	char * query;
@@ -60,9 +60,9 @@ static int64_t _pgsql_get_last_id(PgSQL * pgsql);
 static int _pgsql_query(PgSQL * pgsql, char const * query,
 		DatabaseCallback callback, void * data);
 
-static PgSQLStatement * _pgsql_prepare_new(PgSQL * pgsql, char const * query);
-static void _pgsql_prepare_delete(PgSQL * pgsql, PgSQLStatement * statement);
-static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
+static PgSQLStatement * _pgsql_statement_new(PgSQL * pgsql, char const * query);
+static void _pgsql_statement_delete(PgSQL * pgsql, PgSQLStatement * statement);
+static int _pgsql_statement_query(PgSQL * pgsql, PgSQLStatement * statement,
 		DatabaseCallback callback, void * data, va_list args);
 
 
@@ -76,9 +76,9 @@ DatabaseEngineDefinition database =
 	_pgsql_destroy,
 	_pgsql_get_last_id,
 	_pgsql_query,
-	_pgsql_prepare_new,
-	_pgsql_prepare_delete,
-	_pgsql_prepare_query
+	_pgsql_statement_new,
+	_pgsql_statement_delete,
+	_pgsql_statement_query
 };
 
 
@@ -158,10 +158,10 @@ static int64_t _pgsql_get_last_id(PgSQL * pgsql)
 
 
 /* useful */
-/* pgsql_prepare_new */
-static void _prepare_new_adapt(char * q);
+/* pgsql_statement_new */
+static void _statement_new_adapt(char * q);
 
-static PgSQLStatement * _pgsql_prepare_new(PgSQL * pgsql,
+static PgSQLStatement * _pgsql_statement_new(PgSQL * pgsql,
 		char const * query)
 {
 	PgSQLStatement * statement;
@@ -178,25 +178,25 @@ static PgSQLStatement * _pgsql_prepare_new(PgSQL * pgsql,
 	if(statement->query == NULL || q == NULL)
 	{
 		free(q);
-		_pgsql_prepare_delete(pgsql, statement);
+		_pgsql_statement_delete(pgsql, statement);
 		return NULL;
 	}
 	/* adapt the statement for PostgreSQL */
-	_prepare_new_adapt(q);
+	_statement_new_adapt(q);
 	if((statement->res = PQprepare(pgsql->handle, query, q, 0, NULL))
 			== NULL
 			|| PQresultStatus(statement->res) != PGRES_COMMAND_OK)
 	{
 		error_set_code(1, "%s", PQerrorMessage(pgsql->handle));
 		free(q);
-		_pgsql_prepare_delete(pgsql, statement);
+		_pgsql_statement_delete(pgsql, statement);
 		return NULL;
 	}
 	free(q);
 	return statement;
 }
 
-static void _prepare_new_adapt(char * query)
+static void _statement_new_adapt(char * query)
 {
 	int i;
 	char * p;
@@ -218,8 +218,8 @@ static void _prepare_new_adapt(char * query)
 }
 
 
-/* pgsql_prepare_delete */
-static void _pgsql_prepare_delete(PgSQL * pgsql,
+/* pgsql_statement_delete */
+static void _pgsql_statement_delete(PgSQL * pgsql,
 		PgSQLStatement * statement)
 {
 	(void) pgsql;
@@ -230,8 +230,8 @@ static void _pgsql_prepare_delete(PgSQL * pgsql,
 }
 
 
-/* pgsql_prepare_query */
-static int _pgsql_prepare_query(PgSQL * pgsql, PgSQLStatement * statement,
+/* pgsql_statement_query */
+static int _pgsql_statement_query(PgSQL * pgsql, PgSQLStatement * statement,
 		DatabaseCallback callback, void * data, va_list args)
 {
 	int ret = 0;

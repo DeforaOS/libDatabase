@@ -34,7 +34,6 @@ typedef enum _DatabaseType
 } DatabaseType;
 
 typedef struct _Database Database;
-typedef struct _DatabaseStatement DatabaseStatement;
 
 typedef int (*DatabaseCallback)(void * data, int argc, char ** argv,
 		char ** columns);
@@ -50,13 +49,6 @@ void database_delete(Database * database);
 int64_t database_get_last_id(Database * database);
 
 /* useful */
-DatabaseStatement * database_prepare_new(Database * database,
-		char const * query);
-void database_prepare_delete(Database * database,
-		DatabaseStatement * statement);
-int database_prepare_query(Database * database, DatabaseStatement * statement,
-		DatabaseCallback callback, void * data, ...);
-
 int database_query(Database * database, char const * query,
 		DatabaseCallback callback, void * data);
 

@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) 2012-2015 Pierre Pronchery <khorben@defora.org> */
+/* Copyright (c) 2019 Pierre Pronchery <khorben@defora.org> */
 /* This file is part of DeforaOS Database libDatabase */
 /* This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,24 @@
 
 
 
-#ifndef LIBDATABASE_DATABASE_H
-# define LIBDATABASE_DATABASE_H
+#ifndef LIBDATABASE_SRC_DATABASE_H
+# define LIBDATABASE_SRC_DATABASE_H
 
 # include "Database/database.h"
 # include "Database/engine.h"
-# include "Database/statement.h"
 
 
-#endif /* !LIBDATABASE_DATABASE_H */
+/* Database */
+/* protected */
+/* functions */
+DatabaseEngineStatement * database_engine_statement_new(Database * database,
+		char const * query);
+void database_engine_statement_delete(Database * database,
+		DatabaseEngineStatement * statement);
+
+/* useful */
+int database_engine_statement_query(Database * database,
+		DatabaseEngineStatement * statement,
+		DatabaseCallback callback, void * data, va_list args);
+
+#endif /* !LIBDATABASE_SRC_DATABASE_H */
