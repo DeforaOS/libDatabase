@@ -149,6 +149,8 @@ static SQLite3Statement * _sqlite3_prepare_new(SQLite3 * sqlite3,
 static void _sqlite3_prepare_delete(SQLite3 * sqlite3,
 		SQLite3Statement * statement)
 {
+	(void) sqlite3;
+
 	/* XXX ignore errors */
 	sqlite3_finalize(statement->stmt);
 	object_delete(statement);
