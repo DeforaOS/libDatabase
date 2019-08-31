@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) 2012-2015 Pierre Pronchery <khorben@defora.org> */
+/* Copyright (c) 2012-2019 Pierre Pronchery <khorben@defora.org> */
 /* This file is part of DeforaOS Database libDatabase */
 /* This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ typedef struct _DatabaseEngine
 	sqlite * handle;
 } SQLite2;
 
-typedef struct _DatabaseStatement
+typedef struct _DatabaseEngineStatement
 {
 	char * query;
 } SQLite2Statement;
@@ -51,10 +51,10 @@ static int64_t _sqlite2_get_last_id(SQLite2 * pgsql);
 static int _sqlite2_query(SQLite2 * pgsql, char const * query,
 		DatabaseCallback callback, void * data);
 
-static SQLite2Statement * _sqlite2_prepare_new(SQLite2 * pgsql,
+static SQLite2Statement * _sqlite2_statement_new(SQLite2 * pgsql,
 		char const * query);
-static void _sqlite2_prepare_delete(SQLite2 * pgsql, SQLite2Statement * statement);
-static int _sqlite2_prepare_query(SQLite2 * sqlite,
+static void _sqlite2_statement_delete(SQLite2 * pgsql, SQLite2Statement * statement);
+static int _sqlite2_statement_query(SQLite2 * sqlite,
 		SQLite2Statement * statement, DatabaseCallback callback,
 		void * data, va_list args);
 
@@ -69,9 +69,9 @@ DatabaseEngineDefinition database =
 	_sqlite2_destroy,
 	_sqlite2_get_last_id,
 	_sqlite2_query,
-	_sqlite2_prepare_new,
-	_sqlite2_prepare_delete,
-	_sqlite2_prepare_query
+	_sqlite2_statement_new,
+	_sqlite2_statement_delete,
+	_sqlite2_statement_query
 };
 
 
@@ -124,8 +124,8 @@ static int64_t _sqlite2_get_last_id(SQLite2 * sqlite)
 
 
 /* useful */
-/* _sqlite2_prepare_new */
-static SQLite2Statement * _sqlite2_prepare_new(SQLite2 * sqlite,
+/* _sqlite2_statement_new */
+static SQLite2Statement * _sqlite2_statement_new(SQLite2 * sqlite,
 		char const * query)
 {
 	SQLite2Statement * statement;
@@ -138,16 +138,16 @@ static SQLite2Statement * _sqlite2_prepare_new(SQLite2 * sqlite,
 }
 
 
-/* _sqlite2_prepare_delete */
-static void _sqlite2_prepare_delete(SQLite2 * sqlite, SQLite2Statement * statement)
+/* _sqlite2_statement_delete */
+static void _sqlite2_statement_delete(SQLite2 * sqlite, SQLite2Statement * statement)
 {
 	string_delete(statement->query);
 	object_delete(statement);
 }
 
 
-/* _sqlite2_prepare_query */
-static int _sqlite2_prepare_query(SQLite2 * sqlite,
+/* _sqlite2_statement_query */
+static int _sqlite2_statement_query(SQLite2 * sqlite,
 		SQLite2Statement * statement, DatabaseCallback callback,
 		void * data, va_list args)
 {

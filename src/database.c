@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) 2012-2015 Pierre Pronchery <khorben@defora.org> */
+/* Copyright (c) 2012-2019 Pierre Pronchery <khorben@defora.org> */
 /* This file is part of DeforaOS Database libDatabase */
 /* This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,9 @@
 
 #include <string.h>
 #include <System.h>
-#include "Database.h"
+#include "Database/database.h"
+#include "Database/engine.h"
+#include "database.h"
 #include "../config.h"
 
 #ifndef PREFIX
@@ -87,36 +89,7 @@ int64_t database_get_last_id(Database * database)
 }
 
 
-/* database_prepare_new */
-DatabaseStatement * database_prepare_new(Database * database,
-		char const * query)
-{
-	return database->dplugin->prepare_new(database->database, query);
-}
-
-
-/* database_prepare_delete */
-void database_prepare_delete(Database * database, DatabaseStatement * statement)
-{
-	database->dplugin->prepare_delete(database->database, statement);
-}
-
-
-/* database_prepare_query */
-int database_prepare_query(Database * database, DatabaseStatement * statement,
-		DatabaseCallback callback, void * data, ...)
-{
-	int ret;
-	va_list ap;
-
-	va_start(ap, data);
-	ret = database->dplugin->prepare_query(database->database, statement,
-			callback, data, ap);
-	va_end(ap);
-	return ret;
-}
-
-
+/* useful */
 /* database_query */
 int database_query(Database * database, char const * query,
 		DatabaseCallback callback, void * data)
@@ -124,3 +97,34 @@ int database_query(Database * database, char const * query,
 	return database->dplugin->query(database->database, query, callback,
 			data);
 }
+
+
+/* protected */
+/* functions */
+/* database_engine_statement_new */
+DatabaseEngineStatement * database_engine_statement_new(Database * database,
+		char const * query)
+{
+	return database->dplugin->statement_new(database->database, query);
+}
+
+
+/* database_engine_statement_delete */
+void database_engine_statement_delete(Database * database,
+		DatabaseEngineStatement * statement)
+{
+	database->dplugin->statement_delete(database->database, statement);
+}
+
+
+/* useful */
+/* database_engine_statement_query */
+int database_engine_statement_query(Database * database,
+		DatabaseEngineStatement * statement,
+		DatabaseCallback callback, void * data, va_list args)
+{
+	return database->dplugin->statement_query(database->database, statement,
+			callback, data, args);
+}
+
+

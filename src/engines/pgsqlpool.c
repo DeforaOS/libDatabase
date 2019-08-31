@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) 2015 Pierre Pronchery <khorben@defora.org> */
+/* Copyright (c) 2015-2019 Pierre Pronchery <khorben@defora.org> */
 /* This file is part of DeforaOS Database libDatabase */
 /* This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ DatabaseEngineDefinition database =
 	_pgsql_destroy,
 	_pgsql_get_last_id,
 	_pgsql_query,
-	_pgsql_prepare_new,
-	_pgsql_prepare_delete,
-	_pgsql_prepare_query
+	_pgsql_statement_new,
+	_pgsql_statement_delete,
+	_pgsql_statement_query
 };
 
 

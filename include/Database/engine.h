@@ -28,6 +28,7 @@
 /* public */
 /* types */
 typedef struct _DatabaseEngine DatabaseEngine;
+typedef struct _DatabaseEngineStatement DatabaseEngineStatement;
 
 typedef struct _DatabaseEngineDefinition
 {
@@ -46,12 +47,12 @@ typedef struct _DatabaseEngineDefinition
 			DatabaseCallback callback, void * data);
 
 	/* prepared statements */
-	DatabaseStatement * (*prepare_new)(DatabaseEngine * engine,
+	DatabaseEngineStatement * (*statement_new)(DatabaseEngine * engine,
 			char const * query);
-	void (*prepare_delete)(DatabaseEngine * engine,
-			DatabaseStatement * statement);
-	int (*prepare_query)(DatabaseEngine * engine,
-			DatabaseStatement * statement,
+	void (*statement_delete)(DatabaseEngine * engine,
+			DatabaseEngineStatement * statement);
+	int (*statement_query)(DatabaseEngine * engine,
+			DatabaseEngineStatement * statement,
 			DatabaseCallback callback, void * data,
 			va_list args);
 } DatabaseEngineDefinition;

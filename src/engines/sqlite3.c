@@ -34,7 +34,7 @@ typedef struct _DatabaseEngine
 	sqlite3 * handle;
 } SQLite3;
 
-typedef struct _DatabaseStatement
+typedef struct _DatabaseEngineStatement
 {
 	sqlite3_stmt * stmt;
 } SQLite3Statement;
@@ -51,11 +51,11 @@ static int64_t _sqlite3_get_last_id(SQLite3 * sqlite3);
 static int _sqlite3_query(SQLite3 * sqlite3, char const * query,
 		DatabaseCallback callback, void * data);
 
-static SQLite3Statement * _sqlite3_prepare_new(SQLite3 * sqlite3,
+static SQLite3Statement * _sqlite3_statement_new(SQLite3 * sqlite3,
 		char const * query);
-static void _sqlite3_prepare_delete(SQLite3 * sqlite3,
+static void _sqlite3_statement_delete(SQLite3 * sqlite3,
 		SQLite3Statement * statement);
-static int _sqlite3_prepare_query(SQLite3 * sqlite3,
+static int _sqlite3_statement_query(SQLite3 * sqlite3,
 		SQLite3Statement * statement, DatabaseCallback callback,
 		void * data, va_list args);
 
@@ -70,9 +70,9 @@ DatabaseEngineDefinition database =
 	_sqlite3_destroy,
 	_sqlite3_get_last_id,
 	_sqlite3_query,
-	_sqlite3_prepare_new,
-	_sqlite3_prepare_delete,
-	_sqlite3_prepare_query
+	_sqlite3_statement_new,
+	_sqlite3_statement_delete,
+	_sqlite3_statement_query
 };
 
 
@@ -123,8 +123,8 @@ static int64_t _sqlite3_get_last_id(SQLite3 * sqlite3)
 
 
 /* useful */
-/* _sqlite3_prepare_new */
-static SQLite3Statement * _sqlite3_prepare_new(SQLite3 * sqlite3,
+/* _sqlite3_statement_new */
+static SQLite3Statement * _sqlite3_statement_new(SQLite3 * sqlite3,
 		char const * query)
 {
 	SQLite3Statement * statement;
@@ -145,8 +145,8 @@ static SQLite3Statement * _sqlite3_prepare_new(SQLite3 * sqlite3,
 }
 
 
-/* _sqlite3_prepare_delete */
-static void _sqlite3_prepare_delete(SQLite3 * sqlite3,
+/* _sqlite3_statement_delete */
+static void _sqlite3_statement_delete(SQLite3 * sqlite3,
 		SQLite3Statement * statement)
 {
 	(void) sqlite3;
@@ -157,8 +157,8 @@ static void _sqlite3_prepare_delete(SQLite3 * sqlite3,
 }
 
 
-/* _sqlite3_prepare_query */
-static int _sqlite3_prepare_query(SQLite3 * sqlite3,
+/* _sqlite3_statement_query */
+static int _sqlite3_statement_query(SQLite3 * sqlite3,
 		SQLite3Statement * statement, DatabaseCallback callback,
 		void * data, va_list args)
 {

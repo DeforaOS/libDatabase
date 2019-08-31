@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) 2012-2015 Pierre Pronchery <khorben@defora.org> */
+/* Copyright (c) 2012-2019 Pierre Pronchery <khorben@defora.org> */
 /* This file is part of DeforaOS Database libDatabase */
 /* This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ typedef struct _DatabaseEngine
 	void * handle;
 } Template;
 
-typedef struct _DatabaseStatement
+typedef struct _DatabaseEngineStatement
 {
 	char * query;
 } TemplateStatement;
@@ -50,10 +50,10 @@ static int64_t _template_get_last_id(Template * pgsql);
 static int _template_query(Template * pgsql, char const * query,
 		DatabaseCallback callback, void * data);
 
-static TemplateStatement * _template_prepare_new(Template * pgsql,
+static TemplateStatement * _template_statement_new(Template * pgsql,
 		char const * query);
-static void _template_prepare_delete(Template * pgsql, TemplateStatement * statement);
-static int _template_prepare_query(Template * template,
+static void _template_statement_delete(Template * pgsql, TemplateStatement * statement);
+static int _template_statement_query(Template * template,
 		TemplateStatement * statement, DatabaseCallback callback,
 		void * data, va_list args);
 
@@ -68,9 +68,9 @@ DatabaseEngineDefinition database =
 	_template_destroy,
 	_template_get_last_id,
 	_template_query,
-	_template_prepare_new,
-	_template_prepare_delete,
-	_template_prepare_query
+	_template_statement_new,
+	_template_statement_delete,
+	_template_statement_query
 };
 
 
@@ -105,8 +105,8 @@ static int64_t _template_get_last_id(Template * template)
 
 
 /* useful */
-/* template_prepare_new */
-static TemplateStatement * _template_prepare_new(Template * template,
+/* template_statement_new */
+static TemplateStatement * _template_statement_new(Template * template,
 		char const * query)
 {
 	TemplateStatement * statement;
@@ -118,16 +118,16 @@ static TemplateStatement * _template_prepare_new(Template * template,
 }
 
 
-/* template_prepare_delete */
-static void _template_prepare_delete(Template * template, TemplateStatement * statement)
+/* template_statement_delete */
+static void _template_statement_delete(Template * template, TemplateStatement * statement)
 {
 	string_delete(statement->query);
 	object_delete(statement);
 }
 
 
-/* template_prepare_query */
-static int _template_prepare_query(Template * template,
+/* template_statement_query */
+static int _template_statement_query(Template * template,
 		TemplateStatement * statement, DatabaseCallback callback,
 		void * data, va_list args)
 {
