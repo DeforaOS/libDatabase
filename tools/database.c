@@ -21,36 +21,37 @@
 #include "Database.h"
 
 #ifndef PROGNAME
-# define PROGNAME	"client"
+# define PROGNAME	"database"
 #endif
 
 
-/* client */
+/* database */
 /* private */
 /* types */
-typedef struct _Client
+typedef struct _DatabaseFile
 {
 	FILE * fp;
 	int first;
 	int rows;
-} Client;
+} DatabaseFile;
 
 
 /* prototypes */
-static int _client(char const * engine, char const * cfile,
+static int _database(char const * engine, char const * cfile,
 		char const * section);
 
 static int _usage(void);
 
 
 /* functions */
-/* client */
-static int _client_print(void * data, int argc, char ** argv, char ** columns);
+/* database */
+static int _database_print(void * data, int argc, char ** argv,
+		char ** columns);
 
-static int _client(char const * engine, char const * cfile,
+static int _database(char const * engine, char const * cfile,
 		char const * section)
 {
-	Client client;
+	DatabaseFile database;
 	Config * config;
 	Database * db;
 	char buf[BUFSIZ];
@@ -69,41 +70,41 @@ static int _client(char const * engine, char const * cfile,
 		config_delete(config);
 		return 2;
 	}
-	client.fp = stdout;
+	database.fp = stdout;
 	while(fgets(buf, sizeof(buf), stdin) != NULL)
 	{
-		client.first = 1;
-		client.rows = 0;
+		database.first = 1;
+		database.rows = 0;
 		/* XXX it may not have picked a complete line */
-		if(database_query(db, buf, _client_print, &client) != 0)
+		if(database_query(db, buf, _database_print, &database) != 0)
 		{
 			error_print(PROGNAME);
 			continue;
 		}
-		fprintf(client.fp, "(%u rows)\n", client.rows);
+		fprintf(database.fp, "(%u rows)\n", database.rows);
 	}
 	database_delete(db);
 	return 0;
 }
 
-static int _client_print(void * data, int argc, char ** argv, char ** columns)
+static int _database_print(void * data, int argc, char ** argv, char ** columns)
 {
-	Client * client = data;
+	DatabaseFile * database = data;
 	int i;
 
-	client->rows++;
+	database->rows++;
 	if(argc == 0)
 		return 0;
-	if(client->first != 0)
+	if(database->first != 0)
 	{
-		client->first = 0;
+		database->first = 0;
 		for(i = 0; i < argc; i++)
-			fprintf(client->fp, "|%s", columns[i]);
-		fputs("|\n", client->fp);
+			fprintf(database->fp, "|%s", columns[i]);
+		fputs("|\n", database->fp);
 	}
 	for(i = 0; i < argc; i++)
-		fprintf(client->fp, "|%s", argv[i]);
-	fputs("|\n", client->fp);
+		fprintf(database->fp, "|%s", argv[i]);
+	fputs("|\n", database->fp);
 	return 0;
 }
 
@@ -147,5 +148,5 @@ int main(int argc, char * argv[])
 		}
 	if(engine == NULL || optind != argc)
 		return _usage();
-	return (_client(engine, cfile, section) == 0) ? 0 : 2;
+	return (_database(engine, cfile, section) == 0) ? 0 : 2;
 }
