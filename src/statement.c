@@ -68,6 +68,7 @@ Database * databasestatement_get_database(DatabaseStatement * statement)
 }
 
 
+/* useful */
 /* databasestatement_query */
 int databasestatement_query(DatabaseStatement * statement,
 		DatabaseCallback callback, void * data, ...)
@@ -76,8 +77,16 @@ int databasestatement_query(DatabaseStatement * statement,
 	va_list args;
 
 	va_start(args, data);
-	ret = database_engine_statement_query(statement->database,
-			statement->statement, callback, data, args);
+	ret = databasestatement_queryv(statement, callback, data, args);
 	va_end(args);
 	return ret;
+}
+
+
+/* databasestatement_queryv */
+int databasestatement_queryv(DatabaseStatement * statement,
+		DatabaseCallback callback, void * data, va_list args)
+{
+	return database_engine_statement_query(statement->database,
+			statement->statement, callback, data, args);
 }

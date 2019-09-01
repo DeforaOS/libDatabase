@@ -18,6 +18,7 @@
 #ifndef LIBDATABASE_DATABASE_STATEMENT_H
 # define LIBDATABASE_DATABASE_STATEMENT_H
 
+# include <stdarg.h>
 # include "database.h"
 
 
@@ -39,5 +40,7 @@ Database * databasestatement_get_database(DatabaseStatement * statement);
 /* useful */
 int databasestatement_query(DatabaseStatement * statement,
 		DatabaseCallback callback, void * data, ...);
+int databasestatement_queryv(DatabaseStatement * statement,
+		DatabaseCallback callback, void * data, va_list args);
 
 #endif /* !LIBDATABASE_DATABASE_STATEMENT_H */
