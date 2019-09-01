@@ -41,6 +41,8 @@ static int _database(char const * engine, char const * cfile,
 		char const * section);
 static Database * _database_load(char const * engine, char const * cfile,
 		char const * section);
+static int _database_print(void * data, int argc, char ** argv,
+		char ** columns);
 static int _database_query(char const * engine, char const * cfile,
 		char const * section, char const * query);
 
@@ -49,9 +51,6 @@ static int _usage(void);
 
 /* functions */
 /* database */
-static int _database_print(void * data, int argc, char ** argv,
-		char ** columns);
-
 static int _database(char const * engine, char const * cfile,
 		char const * section)
 {
@@ -81,6 +80,28 @@ static int _database(char const * engine, char const * cfile,
 	return 0;
 }
 
+
+/* database_load */
+static Database * _database_load(char const * engine, char const * cfile,
+		char const * section)
+{
+	Database * db;
+	Config * config;
+
+	if(cfile == NULL)
+		section = NULL;
+	if((config = config_new()) == NULL)
+		return NULL;
+	if(cfile != NULL && config_load(config, cfile) != 0)
+		db = NULL;
+	else
+		db = database_new(engine, config, section);
+	config_delete(config);
+	return db;
+}
+
+
+/* database_print */
 static int _database_print(void * data, int argc, char ** argv, char ** columns)
 {
 	DatabaseFile * database = data;
@@ -103,71 +124,30 @@ static int _database_print(void * data, int argc, char ** argv, char ** columns)
 }
 
 
-/* database_load */
-static Database * _database_load(char const * engine, char const * cfile,
-		char const * section)
-{
-	Database * db;
-	Config * config;
-
-	if(cfile == NULL)
-		section = NULL;
-	if((config = config_new()) == NULL)
-		return NULL;
-	if(cfile != NULL && config_load(config, cfile) != 0)
-		db = NULL;
-	else
-		db = database_new(engine, config, section);
-	config_delete(config);
-	return db;
-}
-
-
 /* database_query */
-static int _database_query_print(void * data, int argc, char ** argv,
-		char ** columns);
-
 static int _database_query(char const * engine, char const * cfile,
 		char const * section, char const * query)
 {
 	int ret;
+	DatabaseFile database;
 	Database * db;
-	unsigned int rows = 0;
 
 	if((db = _database_load(engine, cfile, section)) == NULL)
 	{
 		error_print(PROGNAME);
 		return 2;
 	}
-	if((ret = database_query(db, query, _database_query_print, &rows)) != 0)
+	database.fp = stdout;
+	database.first = 1;
+	database.rows = 0;
+	if((ret = database_query(db, query, _database_print, &database)) != 0)
 	{
 		error_print(PROGNAME);
 		return ret;
 	}
-	printf("(%u rows)\n", rows);
+	printf("(%u rows)\n", database.rows);
 	database_delete(db);
 	return ret;
-}
-
-static int _database_query_print(void * data, int argc, char ** argv,
-		char ** columns)
-{
-	unsigned int * rows = data;
-	int i;
-
-	(*rows)++;
-	if(argc == 0)
-		return 0;
-	if(*rows == 1)
-	{
-		for(i = 0; i < argc; i++)
-			printf("|%s", columns[i]);
-		puts("|");
-	}
-	for(i = 0; i < argc; i++)
-		printf("|%s", argv[i]);
-	puts("|");
-	return 0;
 }
 
 
