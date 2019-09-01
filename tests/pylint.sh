@@ -1,6 +1,6 @@
 #!/bin/sh
 #$Id$
-#Copyright (c) 2014-2015 Pierre Pronchery <khorben@defora.org>
+#Copyright (c) 2014-2017 Pierre Pronchery <khorben@defora.org>
 #
 #Redistribution and use in source and binary forms, with or without
 #modification, are permitted provided that the following conditions are met:
@@ -26,22 +26,47 @@
 
 #variables
 PROGNAME="pylint.sh"
+PROJECTCONF="../project.conf"
 #executables
+DATE="date"
 DEBUG="_debug"
 FIND="find"
 PYLINT="pep8"
+SORT="sort -n"
+TR="tr"
 
 
 #functions
 #pylint
 _pylint()
 {
-	filename="$1"
+	subdirs="data doc src tests tools"
 
-	#XXX ignores errors
-	$DEBUG $PYLINT -- "$filename" 2>&1 | while read line; do
-		echo "$line" 1>&2
-		echo "$line"
+	$DATE
+	while read line; do
+		case "$line" in
+			"["*)
+				break
+				;;
+			"subdirs="*)
+				subdirs=${line#subdirs=}
+				subdirs=$(echo "$subdirs" | $TR ',' ' ')
+				;;
+		esac
+	done < "$PROJECTCONF"
+	for subdir in $subdirs; do
+		[ -d "../$subdir" ] || continue
+		for filename in $($FIND "../$subdir" -type f -a -name '*.py' | $SORT); do
+			echo
+			echo "Testing: $filename"
+			$DEBUG $PYLINT -- "$filename" 2>&1
+			if [ $? -eq 0 ]; then
+				echo "$PROGNAME: $filename: OK" 1>&2
+			else
+				#XXX ignore errors
+				echo "$PROGNAME: $filename: FAIL" 1>&2
+			fi
+		done
 	done
 }
 
@@ -49,7 +74,7 @@ _pylint()
 #debug
 _debug()
 {
-	echo "$@" 1>&2
+	echo "$@" 1>&3
 	"$@"
 	res=$?
 	#ignore errors when the command is not available
@@ -61,17 +86,20 @@ _debug()
 #usage
 _usage()
 {
-	echo "Usage: $PROGNAME [-c] target" 1>&2
+	echo "Usage: $PROGNAME [-c] target..." 1>&2
 	return 1
 }
 
 
 #main
 clean=0
-while getopts "cP:" name; do
+while getopts "cO:P:" name; do
 	case "$name" in
 		c)
 			clean=1
+			;;
+		O)
+			export "${OPTARG%%=*}"="${OPTARG#*=}"
 			;;
 		P)
 			#XXX ignored for compatibility
@@ -83,19 +111,18 @@ while getopts "cP:" name; do
 	esac
 done
 shift $((OPTIND - 1))
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
 	_usage
 	exit $?
 fi
-target="$1"
 
 #clean
 [ $clean -ne 0 ] && exit 0
 
-ret=0
-(date
-echo
-$FIND "../doc" "../src" "../tests" "../tools" -name '*.py' | while read filename; do
-	_pylint "$filename"
-done) > "$target"
-exit $ret
+exec 3>&1
+while [ $# -gt 0 ]; do
+	target="$1"
+	shift
+
+	_pylint > "$target"					|| exit 2
+done
