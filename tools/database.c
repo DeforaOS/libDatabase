@@ -32,7 +32,7 @@ typedef struct _DatabaseFile
 {
 	FILE * fp;
 	int first;
-	int rows;
+	unsigned int rows;
 } DatabaseFile;
 
 
