@@ -39,6 +39,10 @@ typedef struct _DatabaseFile
 /* prototypes */
 static int _database(char const * engine, char const * cfile,
 		char const * section);
+static Database * _database_load(char const * engine, char const * cfile,
+		char const * section);
+static int _database_query(char const * engine, char const * cfile,
+		char const * section, char const * query);
 
 static int _usage(void);
 
@@ -52,22 +56,12 @@ static int _database(char const * engine, char const * cfile,
 		char const * section)
 {
 	DatabaseFile database;
-	Config * config;
 	Database * db;
 	char buf[BUFSIZ];
 
-	if(cfile == NULL)
-		section = NULL;
-	if((config = config_new()) == NULL)
+	if((db = _database_load(engine, cfile, section)) == NULL)
 	{
 		error_print(PROGNAME);
-		return -1;
-	}
-	if((cfile != NULL && config_load(config, cfile) != 0)
-			|| (db = database_new(engine, config, section)) == NULL)
-	{
-		error_print(PROGNAME);
-		config_delete(config);
 		return 2;
 	}
 	database.fp = stdout;
@@ -109,10 +103,78 @@ static int _database_print(void * data, int argc, char ** argv, char ** columns)
 }
 
 
+/* database_load */
+static Database * _database_load(char const * engine, char const * cfile,
+		char const * section)
+{
+	Database * db;
+	Config * config;
+
+	if(cfile == NULL)
+		section = NULL;
+	if((config = config_new()) == NULL)
+		return NULL;
+	if(cfile != NULL && config_load(config, cfile) != 0)
+		db = NULL;
+	else
+		db = database_new(engine, config, section);
+	config_delete(config);
+	return db;
+}
+
+
+/* database_query */
+static int _database_query_print(void * data, int argc, char ** argv,
+		char ** columns);
+
+static int _database_query(char const * engine, char const * cfile,
+		char const * section, char const * query)
+{
+	int ret;
+	Database * db;
+	unsigned int rows = 0;
+
+	if((db = _database_load(engine, cfile, section)) == NULL)
+	{
+		error_print(PROGNAME);
+		return 2;
+	}
+	if((ret = database_query(db, query, _database_query_print, &rows)) != 0)
+	{
+		error_print(PROGNAME);
+		return ret;
+	}
+	printf("(%u rows)\n", rows);
+	database_delete(db);
+	return ret;
+}
+
+static int _database_query_print(void * data, int argc, char ** argv,
+		char ** columns)
+{
+	unsigned int * rows = data;
+	int i;
+
+	(*rows)++;
+	if(argc == 0)
+		return 0;
+	if(*rows == 1)
+	{
+		for(i = 0; i < argc; i++)
+			printf("|%s", columns[i]);
+		puts("|");
+	}
+	for(i = 0; i < argc; i++)
+		printf("|%s", argv[i]);
+	puts("|");
+	return 0;
+}
+
+
 /* usage */
 static int _usage(void)
 {
-	fputs("Usage: " PROGNAME " -d engine [-C configuration [-S section]]\n"
+	fputs("Usage: " PROGNAME " -d engine [-C configuration [-S section]][query]\n"
 "  -d	Database engine to load\n"
 "  -C	Connection file to load\n"
 "  -S	Section of the connection file to use\n",
@@ -146,7 +208,11 @@ int main(int argc, char * argv[])
 			default:
 				return _usage();
 		}
-	if(engine == NULL || optind != argc)
+	if(engine == NULL)
 		return _usage();
+	else if(optind + 1 < argc)
+		return _usage();
+	else if(optind + 1 == argc)
+		return _database_query(engine, cfile, section, argv[optind]);
 	return (_database(engine, cfile, section) == 0) ? 0 : 2;
 }
