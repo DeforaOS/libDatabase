@@ -33,6 +33,9 @@ DatabaseStatement * databasestatement_new(Database * database,
 		char const * query);
 void databasestatement_delete(DatabaseStatement * statement);
 
+/* accessors */
+Database * databasestatement_get_database(DatabaseStatement * statement);
+
 /* useful */
 int databasestatement_query(DatabaseStatement * statement,
 		DatabaseCallback callback, void * data, ...);

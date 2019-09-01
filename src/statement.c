@@ -61,6 +61,13 @@ void databasestatement_delete(DatabaseStatement * statement)
 }
 
 
+/* accessors */
+Database * databasestatement_get_database(DatabaseStatement * statement)
+{
+	return statement->database;
+}
+
+
 /* databasestatement_query */
 int databasestatement_query(DatabaseStatement * statement,
 		DatabaseCallback callback, void * data, ...)
