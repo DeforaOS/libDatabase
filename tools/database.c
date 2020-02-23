@@ -44,7 +44,7 @@ static Database * _database_load(char const * engine, char const * cfile,
 static int _database_print(void * data, int argc, char ** argv,
 		char ** columns);
 static int _database_query(char const * engine, char const * cfile,
-		char const * section, char const * query);
+		char const * section, int queryc, char * const queryv[]);
 
 static int _usage(void);
 
@@ -126,11 +126,12 @@ static int _database_print(void * data, int argc, char ** argv, char ** columns)
 
 /* database_query */
 static int _database_query(char const * engine, char const * cfile,
-		char const * section, char const * query)
+		char const * section, int queryc, char * const queryv[])
 {
-	int ret;
+	int ret = 0;
 	DatabaseFile database;
 	Database * db;
+	int i;
 
 	if((db = _database_load(engine, cfile, section)) == NULL)
 	{
@@ -138,14 +139,18 @@ static int _database_query(char const * engine, char const * cfile,
 		return 2;
 	}
 	database.fp = stdout;
-	database.first = 1;
-	database.rows = 0;
-	if((ret = database_query(db, query, _database_print, &database)) != 0)
+	for(i = 0; i < queryc; i++)
 	{
-		error_print(PROGNAME_DATABASE);
-		return ret;
+		database.first = 1;
+		database.rows = 0;
+		if((ret = database_query(db, queryv[i], _database_print,
+						&database)) != 0)
+		{
+			error_print(PROGNAME_DATABASE);
+			break;
+		}
+		printf("(%u rows)\n", database.rows);
 	}
-	printf("(%u rows)\n", database.rows);
 	database_delete(db);
 	return ret;
 }
@@ -155,7 +160,7 @@ static int _database_query(char const * engine, char const * cfile,
 static int _usage(void)
 {
 	fputs("Usage: " PROGNAME_DATABASE
-			" -d engine [-C configuration [-S section]][query]\n"
+			" -d engine [-C configuration [-S section]][query...]\n"
 "  -d	Database engine to load\n"
 "  -C	Connection file to load\n"
 "  -S	Section of the connection file to use\n",
@@ -191,9 +196,8 @@ int main(int argc, char * argv[])
 		}
 	if(engine == NULL)
 		return _usage();
-	else if(optind + 1 < argc)
-		return _usage();
-	else if(optind + 1 == argc)
-		return _database_query(engine, cfile, section, argv[optind]);
+	else if(optind < argc)
+		return _database_query(engine, cfile, section,
+				argc - optind, &argv[optind]);
 	return (_database(engine, cfile, section) == 0) ? 0 : 2;
 }
