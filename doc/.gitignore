@@ -1,3 +1,8 @@
 /database.1
 /database.html
 /database.xml
+/gtkdoc/html
+/gtkdoc/html.stamp
+/gtkdoc/libDatabase.types
+/gtkdoc/tmpl.stamp
+/gtkdoc/xml.stamp
