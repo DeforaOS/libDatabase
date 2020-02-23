@@ -20,8 +20,8 @@
 #include <System.h>
 #include "Database.h"
 
-#ifndef PROGNAME
-# define PROGNAME	"database"
+#ifndef PROGNAME_DATABASE
+# define PROGNAME_DATABASE	"database"
 #endif
 
 
@@ -60,7 +60,7 @@ static int _database(char const * engine, char const * cfile,
 
 	if((db = _database_load(engine, cfile, section)) == NULL)
 	{
-		error_print(PROGNAME);
+		error_print(PROGNAME_DATABASE);
 		return 2;
 	}
 	database.fp = stdout;
@@ -71,7 +71,7 @@ static int _database(char const * engine, char const * cfile,
 		/* XXX it may not have picked a complete line */
 		if(database_query(db, buf, _database_print, &database) != 0)
 		{
-			error_print(PROGNAME);
+			error_print(PROGNAME_DATABASE);
 			continue;
 		}
 		fprintf(database.fp, "(%u rows)\n", database.rows);
@@ -134,7 +134,7 @@ static int _database_query(char const * engine, char const * cfile,
 
 	if((db = _database_load(engine, cfile, section)) == NULL)
 	{
-		error_print(PROGNAME);
+		error_print(PROGNAME_DATABASE);
 		return 2;
 	}
 	database.fp = stdout;
@@ -142,7 +142,7 @@ static int _database_query(char const * engine, char const * cfile,
 	database.rows = 0;
 	if((ret = database_query(db, query, _database_print, &database)) != 0)
 	{
-		error_print(PROGNAME);
+		error_print(PROGNAME_DATABASE);
 		return ret;
 	}
 	printf("(%u rows)\n", database.rows);
@@ -154,7 +154,8 @@ static int _database_query(char const * engine, char const * cfile,
 /* usage */
 static int _usage(void)
 {
-	fputs("Usage: " PROGNAME " -d engine [-C configuration [-S section]][query]\n"
+	fputs("Usage: " PROGNAME_DATABASE
+			" -d engine [-C configuration [-S section]][query]\n"
 "  -d	Database engine to load\n"
 "  -C	Connection file to load\n"
 "  -S	Section of the connection file to use\n",
