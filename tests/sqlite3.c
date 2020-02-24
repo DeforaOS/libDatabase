@@ -21,8 +21,8 @@
 #include <System.h>
 #include "Database.h"
 
-#ifndef PROGNAME
-# define PROGNAME	"sqlite3"
+#ifndef PROGNAME_SQLITE3
+# define PROGNAME_SQLITE3	"sqlite3"
 #endif
 
 
@@ -45,7 +45,7 @@ static int _sqlite3(void)
 
 	if((config = config_new()) == NULL)
 	{
-		error_print(PROGNAME);
+		error_print(PROGNAME_SQLITE3);
 		return -1;
 	}
 	if((p = getenv("OBJDIR")) != NULL)
@@ -55,7 +55,7 @@ static int _sqlite3(void)
 	if(filename == NULL
 			|| config_set(config, NULL, "filename", filename) != 0)
 	{
-		error_print(PROGNAME);
+		error_print(PROGNAME_SQLITE3);
 		string_delete(filename);
 		config_delete(config);
 		return -1;
@@ -67,7 +67,7 @@ static int _sqlite3(void)
 		return 2;
 	if(database_query(db, "SELECT * FROM \"table\"", NULL, NULL) != 0)
 	{
-		error_print(PROGNAME);
+		error_print(PROGNAME_SQLITE3);
 		database_delete(db);
 		return 2;
 	}
@@ -79,7 +79,7 @@ static int _sqlite3(void)
 /* usage */
 static int _usage(void)
 {
-	fputs("Usage: " PROGNAME "\n", stderr);
+	fputs("Usage: " PROGNAME_SQLITE3 "\n", stderr);
 	return 1;
 }
 
