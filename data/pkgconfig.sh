@@ -1,6 +1,6 @@
 #!/bin/sh
 #$Id$
-#Copyright (c) 2011-2019 Pierre Pronchery <khorben@defora.org>
+#Copyright (c) 2011-2020 Pierre Pronchery <khorben@defora.org>
 #
 #Redistribution and use in source and binary forms, with or without
 #modification, are permitted provided that the following conditions are met:
@@ -27,14 +27,15 @@
 #variables
 CONFIGSH="${0%/pkgconfig.sh}/../config.sh"
 PREFIX="/usr/local"
-DEBUG="_debug"
 DEVNULL="/dev/null"
 PROGNAME="pkgconfig.sh"
 #executables
+DEBUG="_debug"
 INSTALL="install -m 0644"
 MKDIR="mkdir -m 0755 -p"
 RM="rm -f"
 SED="sed"
+
 [ -f "$CONFIGSH" ] && . "$CONFIGSH"
 
 
@@ -150,10 +151,10 @@ while [ $# -gt 0 ]; do
 	if [ "$PREFIX" != "/usr" ]; then
 		RPATH="-Wl,-rpath-link,\${libdir} -Wl,-rpath,\${libdir}"
 		case $(uname -s) in
-			Darwin)
+			"Darwin")
 				RPATH="-Wl,-rpath,\${libdir}"
 				;;
-			SunOS)
+			"SunOS")
 				RPATH="-Wl,-R\${libdir}"
 				;;
 		esac
