@@ -109,6 +109,12 @@ else
 	failures="$failures python.sh"
 fi
 
+if $PKGCONFIG --exists "sqlite"; then
+	tests="$tests sqlite2"
+else
+	failures="$failures sqlite2"
+fi
+
 if $PKGCONFIG --exists "sqlite3"; then
 	tests="$tests sqlite3"
 else
