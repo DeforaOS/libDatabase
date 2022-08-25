@@ -2,6 +2,8 @@
 /fixme.log
 /pylint.log
 /shlint.log
+/sqlite2
+/sqlite2.db
 /sqlite3
 /sqlite3.db
 /tests.log
