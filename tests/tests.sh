@@ -101,13 +101,18 @@ target="$1"
 [ "$clean" -ne 0 ]			&& exit 0
 
 tests="pkgconfig.sh"
-#XXX needs the engine to be installed
-failures="sqlite3"
+failures=
 
-if $PKGCONFIG --exists python-2.7; then
+if $PKGCONFIG --exists "python-2.7"; then
 	tests="$tests python.sh"
 else
 	failures="$failures python.sh"
+fi
+
+if $PKGCONFIG --exists "sqlite3"; then
+	tests="$tests sqlite3"
+else
+	failures="$failures sqlite3"
 fi
 
 $DATE > "$target"
