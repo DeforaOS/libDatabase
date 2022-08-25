@@ -89,6 +89,8 @@ static int _usage(void)
 /* main */
 int main(int argc, char * argv[])
 {
+	(void) argv;
+
 	if(argc != 1)
 		return _usage();
 	return (_sqlite2() == 0) ? 0 : 2;
