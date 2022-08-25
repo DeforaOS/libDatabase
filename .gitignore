@@ -1,9 +1,12 @@
+*~
 *.a
+*.bak
 *.dll
 *.dylib
 *.o
 *.so
 *.so.*
+*.swp
 Makefile
 /config.ent
 /config.h
