@@ -18,6 +18,8 @@ jobs:
         sudo apt-get install -y \
           docbook-xsl \
           gtk-doc-tools \
+          libpq-dev \
+          libsqlite3-dev \
           libxml2-utils \
           xsltproc
     - name: bootstrap libSystem
